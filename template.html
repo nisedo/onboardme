@@ -539,10 +539,6 @@
     animation: slideLeft 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
     }
 
-    .animate-fadeIn {
-    animation: fadeIn 0.8s ease-out both;
-    }
-
     ::selection {
     background: rgba(6, 182, 212, 0.3);
     color: #fff;
@@ -4072,7 +4068,7 @@
 		            `;
 
       return `
-                <div class="node-widget relative pb-4 last:pb-0 ${collapsed ? 'node-collapsed' : ''} ${auditedCollapsed ? 'node-audit-marked' : ''} ${animate ? 'animate-fadeIn' : ''}" style="${animate ? `animation-delay: ${index * 0.2}s` : ''}" data-node-id="${node.id}" data-node-depth="${node.depth}" data-node-contract="${escapeHtmlGlobal(node.contractName || '')}" data-collapse-key="${collapseKey}" data-function-key="${functionKey}" data-function-name="${nameKey}">
+                <div class="node-widget relative pb-4 last:pb-0 ${collapsed ? 'node-collapsed' : ''} ${auditedCollapsed ? 'node-audit-marked' : ''}" style="${animate ? `animation-delay: ${index * 0.2}s` : ''}" data-node-id="${node.id}" data-node-depth="${node.depth}" data-node-contract="${escapeHtmlGlobal(node.contractName || '')}" data-collapse-key="${collapseKey}" data-function-key="${functionKey}" data-function-name="${nameKey}">
                      ${neonCardMarkup('', '', content, 'w-full', true)}
                 </div>
             `;
@@ -4582,7 +4578,7 @@
       if (side === 'left' && !appState.leftCollapsed) {
         const leftEl = document.getElementById('sidebar-left');
         if (leftEl) {
-          leftEl.classList.remove('animate-slideLeft', 'animate-slideRight', 'animate-fadeIn');
+          leftEl.classList.remove('animate-slideLeft', 'animate-slideRight');
           void leftEl.offsetWidth;
           leftEl.classList.add('animate-slideRight');
         }
@@ -4591,7 +4587,7 @@
       if (side === 'right' && !appState.rightCollapsed) {
         const rightEl = document.getElementById('sidebar-right');
         if (rightEl) {
-          rightEl.classList.remove('animate-fadeIn', 'animate-slideRight', 'animate-slideLeft');
+          rightEl.classList.remove('animate-slideRight', 'animate-slideLeft');
           // Force reflow to restart animation
           void rightEl.offsetWidth;
           rightEl.classList.add('animate-slideLeft');
@@ -5241,7 +5237,7 @@
     };
 
     const renderStoragePanel = () => {
-      const animationClass = appState.lastAction === 'toggle-storage' ? 'animate-slideLeft' : 'animate-fadeIn';
+      const animationClass = appState.lastAction === 'toggle-storage' ? 'animate-slideLeft' : '';
       return `
         <aside id="sidebar-right" class="w-96 shrink-0 h-full flex flex-col gap-4 overflow-hidden ${animationClass}" style="${animationClass ? 'animation-delay: 120ms' : ''}">
           ${neonCardMarkup('Storage Writers', 'Find entry points that modify a storage variable', `
@@ -6406,7 +6402,7 @@
 
     const buildMainFlow = (isEntrySwitch) => {
       const graph = callGraphs[appState.activeFunctionId] || [];
-      const mainAnimationClass = (isEntrySwitch || appState.stepByStepEnabled) ? '' : 'animate-fadeIn';
+      const mainAnimationClass = '';
       const hiddenCollapsedCount = getHiddenCollapsedCount();
       const nameArityMap = new Map();
       const nameCounts = new Map();
@@ -6499,7 +6495,7 @@
       const storageWrites = stateWritesByFunction[appState.activeFunctionId] || [];
       const rightAnimationClass = isEntrySwitch
         ? ''
-        : (appState.lastAction === 'toggle-right' ? 'animate-slideLeft' : 'animate-fadeIn');
+        : (appState.lastAction === 'toggle-right' ? 'animate-slideLeft' : '');
       return `
                  <aside id="sidebar-right" class="${appState.rightCollapsed ? 'hidden' : 'w-96 shrink-0'} h-full flex flex-col gap-4 overflow-hidden ${rightAnimationClass}" style="${rightAnimationClass ? 'animation-delay: 200ms' : ''}">
 
