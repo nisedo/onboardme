@@ -870,6 +870,7 @@ def _resolve_override_call(
     call_obj: Any,
     target: Union[Function, Modifier, None],
     root_contract: Contract | None,
+    all_contracts: Sequence[Contract] | None = None,
 ) -> Union[Function, Modifier, None]:
     """Resolve virtual calls to the most-derived override on the root contract."""
     if target is None or root_contract is None:
@@ -894,8 +895,6 @@ def _resolve_override_call(
                 if re.search(contract_pattern, source_text):
                     return target
     target_contract = getattr(target, "contract_declarer", None) or getattr(target, "contract", None)
-    if target_contract is root_contract:
-        return target
 
     target_signature = getattr(target, "solidity_signature", None)
     target_full_name = getattr(target, "full_name", None)
@@ -931,13 +930,42 @@ def _resolve_override_call(
                 return fn
         return None
 
-    override = _find_override(root_contract)
-    if override is not None:
-        return override
+    def _inheritance_depth(contract: Contract | None) -> int:
+        if contract is None:
+            return -1
+        return len(getattr(contract, "inheritance", []) or [])
+
+    # Collect ALL override candidates from root_contract, its parents,
+    # and derived contracts, then pick the most-derived one.
+    candidates: List[tuple[Contract, Function]] = []
+
+    root_override = _find_override(root_contract)
+    if root_override is not None and root_override is not target:
+        candidates.append((root_contract, root_override))
+
     for base in getattr(root_contract, "inheritance", []) or []:
-        override = _find_override(base)
-        if override is not None:
-            return override
+        parent_override = _find_override(base)
+        if parent_override is not None:
+            candidates.append((base, parent_override))
+
+    if all_contracts is not None and target_contract is not None:
+        for contract in all_contracts:
+            if contract is root_contract or contract is target_contract:
+                continue
+            inheritance = getattr(contract, "inheritance", []) or []
+            if target_contract not in inheritance:
+                continue
+            derived_override = _find_override(contract)
+            if derived_override is not None:
+                candidates.append((contract, derived_override))
+
+    if candidates:
+        best_contract, best_override = max(
+            candidates,
+            key=lambda pair: _inheritance_depth(pair[0]),
+        )
+        return best_override
+
     return target
 
 
@@ -1083,7 +1111,7 @@ def _walk_callable(
     for call in ordered_calls:
         target = _call_target(call)
         target = _resolve_unimplemented_call(item, target, root_contract, all_contracts)
-        target = _resolve_override_call(item, call, target, root_contract)
+        target = _resolve_override_call(item, call, target, root_contract, all_contracts)
         if _is_interface_target(target):
             continue
         _walk_callable(
