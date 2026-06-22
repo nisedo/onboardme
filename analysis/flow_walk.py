@@ -530,7 +530,10 @@ def _guarded_parameter_kinds(callable_item: Union[Function, Modifier]) -> Dict[i
                 continue
 
     for node in getattr(callable_item, "nodes", []) or []:
-        for call in getattr(node, "internal_calls", []) or []:
+        for call in chain(
+            getattr(node, "internal_calls", []) or [],
+            getattr(node, "solidity_calls", []) or [],
+        ):
             fn = getattr(call, "function", None)
             fn_name = str(getattr(fn, "name", "") or "")
             if fn_name not in _REQUIRE_ASSERT_NAMES:
@@ -556,6 +559,21 @@ def _guarded_parameter_kinds(callable_item: Union[Function, Modifier]) -> Dict[i
             false_must_revert = _must_revert_from(son_false, must_memo, visiting)
             if true_must_revert or false_must_revert:
                 _mark_kind(cond_val, "if_revert")
+                for ir in getattr(node, "irs", []) or []:
+                    if not isinstance(ir, InternalCall):
+                        continue
+                    ref = getattr(ir, "lvalue", None)
+                    if ref is None:
+                        continue
+                    try:
+                        if not is_dependent(cond_val, ref, callable_item):
+                            continue
+                    except Exception:
+                        continue
+                    for arg in getattr(ir, "arguments", None) or []:
+                        if arg is None:
+                            continue
+                        _mark_kind(arg, "if_revert")
 
     frozen = {idx: tuple(sorted(kinds)) for idx, kinds in guarded.items()}
     _GUARDED_PARAM_KINDS_CACHE[cache_key] = frozen
@@ -590,7 +608,10 @@ def _collect_msg_sender_checks(callable_item: Union[Function, Modifier]) -> List
         node_src = (_source_text(node) or "").strip()
 
         # 1) require/assert guards: require(cond) / assert(cond)
-        for call in getattr(node, "internal_calls", []) or []:
+        for call in chain(
+            getattr(node, "internal_calls", []) or [],
+            getattr(node, "solidity_calls", []) or [],
+        ):
             fn = getattr(call, "function", None)
             fn_name = str(getattr(fn, "name", "") or "")
             if fn_name not in _REQUIRE_ASSERT_NAMES:
