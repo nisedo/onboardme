@@ -1,0 +1,3 @@
+# Development-only dependencies for running the backend test suite.
+# Install with: pip install -r requirements-dev.txt
+pytest>=8.0

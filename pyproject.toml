@@ -1,0 +1,6 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+    "mainnet: runs against the immutable deployed mainnet PoolV3 contract (cached after first fetch)",
+]
