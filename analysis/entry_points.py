@@ -102,11 +102,42 @@ def collect_unique_entry_points(
             overridden_sigs[declarer_key].add(sig)
 
     # ── Collect unique entry points, skipping those overridden by a child  ───
+    # For inherited entry points that are *not* overridden (e.g. PoolV3.depositWithReferral
+    # inherited by PoolV3_USDT), the same function object appears under both base and
+    # derived contracts. To ensure virtual dispatch is resolved for the *deployed*
+    # (most-derived) type, we prefer the most-derived holder.  Example:
+    #   root=PoolV3_USDT (contracts/pool/PoolV3_USDT.sol) inherits PoolV3
+    #   depositWithReferral declarer is PoolV3, but flow for USDT should be walked
+    #   with contract=PoolV3_USDT so that PoolV3.deposit -> _amountMinusFee correctly
+    #   resolves to PoolV3_USDT._amountMinusFee.
+    #   If root=PoolV3.sol (single-file, USDT not in compilation), USDT is not in
+    #   `contracts`, so no effect.  For on-chain (crytic-export) only the deployed
+    #   contract + its bases are in `contracts`, so ordering is irrelevant.
+    # We sort contracts by inheritance depth descending (most derived first) so the
+    # first occurrence kept is the most derived. Depth = len(inheritance) is a
+    # good proxy for C3; ties keep original sorted order.
+    def _depth(c: Any) -> int:
+        try:
+            return len(getattr(c, "inheritance", []) or [])
+        except Exception:
+            return 0
+
+    # Stable sort: most derived first, then name for determinism
+    sorted_contracts = sorted(contracts, key=lambda c: (-_depth(c), getattr(c, "name", "")))
+
     seen: Set[tuple[Any, ...]] = set()
-    result: List[tuple[Any, List[Any]]] = []
-    for contract in contracts:
+    # Map contract_key -> list to preserve original contract objects for return
+    # but we need to return in most-derived-first order for determinism.
+    # We will build result keyed by contract object in sorted order.
+    result_map: Dict[tuple[str, str], List[Any]] = {}
+    contract_obj_map: Dict[tuple[str, str], Any] = {}
+    for contract in sorted_contracts:
         contract_key = _contract_key(contract)
-        unique_for_contract: List[Any] = []
+        # Ensure we have an entry in result_map for this contract
+        if contract_key not in result_map:
+            result_map[contract_key] = []
+            contract_obj_map[contract_key] = contract
+        unique_for_contract = result_map[contract_key]
         for entry_point in entry_points_fn(contract):
             key = entry_point_identity(entry_point)
             if key in seen:
@@ -117,5 +148,14 @@ def collect_unique_entry_points(
                 continue
             seen.add(key)
             unique_for_contract.append(entry_point)
-        result.append((contract, unique_for_contract))
+
+    # Return in most-derived-first order, one entry per contract_key
+    added: Set[tuple[str, str]] = set()
+    result: List[tuple[Any, List[Any]]] = []
+    for contract in sorted_contracts:
+        contract_key = _contract_key(contract)
+        if contract_key in added:
+            continue
+        added.add(contract_key)
+        result.append((contract_obj_map[contract_key], result_map[contract_key]))
     return result

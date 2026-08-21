@@ -8,6 +8,7 @@ examples/*
 .env
 # AI assistant guidance (local only)
 AGENTS.md
+PLAN.md
 # User-local scratch files such as custom templates
 local-only/
 # Python bytecode cache

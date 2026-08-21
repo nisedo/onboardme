@@ -872,33 +872,144 @@ def _resolve_override_call(
     root_contract: Contract | None,
     all_contracts: Sequence[Contract] | None = None,
 ) -> Union[Function, Modifier, None]:
-    """Resolve virtual calls to the most-derived override on the root contract."""
+    """Resolve virtual calls to the most-derived override on the root contract.
+
+    Robust virtual-dispatch resolver:
+    - Honors explicit non-virtual calls (`super.foo()` or `ContractName.foo()`) per call site.
+    - For virtual internal calls, returns the most-derived implementation in the
+      *deployed* `root_contract` linearization only (root + its inheritance).
+      Siblings beyond root (e.g. `PoolV3_USDT is PoolV3`) are NOT considered,
+      because if PoolV3 is the deployed root, PoolV3_USDT does not exist.
+      This matches Solidity C3 linearization semantics and satisfies:
+        * PoolV3 (root=PoolV3.sol) -> PoolV3.deposit, not ERC4626, not PoolV3_USDT
+        * PoolV3_USDT (root=PoolV3_USDT.sol) -> PoolV3_USDT/PooolV3 chain correctly.
+      Works for both local (`Slither(path)`) and on-chain (`Slither(crytic-export)`)
+      analyses because it only uses `root_contract` and its bases, never arbitrary
+      `all_contracts` descendants for implemented virtual calls. Unimplemented
+      interface resolution is handled separately by `_resolve_unimplemented_call`.
+    """
     if target is None or root_contract is None:
         return target
     if not isinstance(target, Function):
         return target
+
+    # 1) Non-virtual detection: super or qualified ContractName.foo()
+    # Check Slither type_call flag first
     call_type = str(getattr(call_obj, "type_call", "") or "").lower()
     if "super" in call_type:
         return target
-    target_name = getattr(target, "name", None)
-    if target_name:
-        source_text = _source_text(caller)
-        if source_text:
-            super_pattern = r"\bsuper\s*\.\s*" + re.escape(target_name) + r"\s*\("
-            if re.search(super_pattern, source_text):
-                return target
-            contract_name = ""
-            if getattr(target, "contract_declarer", None) is not None:
-                contract_name = getattr(target.contract_declarer, "name", "") or ""
-            if contract_name:
-                contract_pattern = r"\b" + re.escape(contract_name) + r"\s*\.\s*" + re.escape(target_name) + r"\s*\("
-                if re.search(contract_pattern, source_text):
-                    return target
-    target_contract = getattr(target, "contract_declarer", None) or getattr(target, "contract", None)
 
+    target_name = getattr(target, "name", None) or ""
+    # Prefer per-call-site source (IR node) over whole caller source to avoid
+    # false positives when caller contains both super/qualified and virtual calls.
+    call_src = ""
+    node = getattr(call_obj, "node", None)
+    if node is not None:
+        try:
+            call_src = _source_text(node) or ""
+        except Exception:
+            call_src = ""
+    caller_src = ""
+    try:
+        caller_src = _source_text(caller) or ""
+    except Exception:
+        caller_src = ""
+
+    # Helper to test a source snippet for super/qualified pattern
+    def _is_qualified_in_src(src: str) -> bool:
+        if not src or not target_name:
+            return False
+        # super.foo(
+        if re.search(r"\bsuper\s*\.\s*" + re.escape(target_name) + r"\s*\(", src):
+            return True
+        # ContractName.foo( where ContractName is target's declarer
+        contract_name = ""
+        try:
+            decl = getattr(target, "contract_declarer", None) or getattr(target, "contract", None)
+            contract_name = getattr(decl, "name", "") or ""
+        except Exception:
+            contract_name = ""
+        if contract_name and re.search(
+            r"\b" + re.escape(contract_name) + r"\s*\.\s*" + re.escape(target_name) + r"\s*\(", src
+        ):
+            return True
+        return False
+
+    # If we have a concrete call-site source, only honor qualified/super there.
+    # Fall back to caller source only when call-site source is empty (e.g., fallback
+    # Function objects from regex scanning that have no node).
+    if call_src:
+        if _is_qualified_in_src(call_src):
+            return target
+    elif caller_src and _is_qualified_in_src(caller_src):
+        # This path is for synthetic Function call objects without a node;
+        # whole-caller heuristic is the best we can do, but we keep it to not
+        # break existing qualified-call handling for those fallbacks.
+        return target
+
+    # 2) Virtual dispatch: find most-derived override in root's linearization.
+    #    Use Slither's C3-aware resolver first, then fallback to manual chain scan.
     target_signature = getattr(target, "solidity_signature", None)
+
+    # Build chain set for validation that target is actually in root's hierarchy.
+    # If target's declarer is outside root's hierarchy (unrelated library), don't
+    # try to override it.
+    try:
+        target_contract = getattr(target, "contract_declarer", None) or getattr(target, "contract", None)
+        chain_contracts = {root_contract}
+        chain_contracts.update(getattr(root_contract, "inheritance", []) or [])
+        if target_contract is not None and target_contract not in chain_contracts:
+            # Check via linearized base contracts if available (more complete)
+            linearized = getattr(root_contract, "_linearizedBaseContracts", None) or []
+            if target_contract not in linearized and target_contract is not root_contract:
+                # Unrelated contract (e.g., external library) – keep original
+                # But still allow if target is interface that root implements indirectly
+                # Interfaces are often not in inheritance list? They are, PoolV3 inherits IERC4626.
+                # So only early-return if truly unrelated and not interface-like.
+                # For safety, continue to resolver but it will likely return target.
+                pass
+    except Exception:
+        pass
+
+    # Primary: Slither's own C3 resolver (handles diamond correctly)
+    if target_signature:
+        try:
+            most_derived = root_contract.get_function_from_signature(target_signature)  # type: ignore[attr-defined]
+            if (
+                most_derived is not None
+                and getattr(most_derived, "is_implemented", True)
+                and getattr(most_derived, "solidity_signature", None) == target_signature
+            ):
+                # Ensure declarer is in root chain (avoid picking unrelated overload)
+                decl = getattr(most_derived, "contract_declarer", None) or getattr(most_derived, "contract", None)
+                chain_set = {root_contract}
+                chain_set.update(getattr(root_contract, "inheritance", []) or [])
+                # Also consider linearized set
+                linearized = getattr(root_contract, "_linearizedBaseContracts", None) or []
+                chain_set.update(linearized)
+                if decl is None or decl in chain_set or getattr(most_derived, "contract", None) in chain_set:
+                    return most_derived
+                # If decl not in chain_set but most_derived is still the root's view of that signature,
+                # it *is* the correct virtual dispatch for this root, so return it.
+                return most_derived
+        except Exception:
+            pass
+        # Also try full_name fallback
+        try:
+            target_full = getattr(target, "full_name", None)
+            if target_full:
+                most_derived2 = root_contract.get_function_from_canonical_name(target_full)  # type: ignore[attr-defined]
+                if most_derived2 and getattr(most_derived2, "is_implemented", True):
+                    return most_derived2
+        except Exception:
+            pass
+
+    # Fallback: manual scan of [root] + inheritance in order that respects C3.
+    # Slither's inheritance is already in linearized order from most base to most derived
+    # or vice versa depending on version; we handle both by checking distance from root
+    # via BFS on immediate_inheritance graph and picking minimal distance.
     target_full_name = getattr(target, "full_name", None)
-    target_name = getattr(target, "name", None)
+    target_name_only = getattr(target, "name", None)
     target_param_types = [str(getattr(p, "type", "")) for p in (getattr(target, "parameters", None) or [])]
 
     def _matches_signature(fn: Function) -> bool:
@@ -909,7 +1020,7 @@ def _resolve_override_call(
         if target_full_name and fn_full_name:
             return fn_full_name == target_full_name
         fn_name = getattr(fn, "name", None)
-        if target_name and fn_name and fn_name != target_name:
+        if target_name_only and fn_name and fn_name != target_name_only:
             return False
         if target_param_types:
             params = getattr(fn, "parameters", None) or []
@@ -930,41 +1041,57 @@ def _resolve_override_call(
                 return fn
         return None
 
-    def _inheritance_depth(contract: Contract | None) -> int:
-        if contract is None:
-            return -1
-        return len(getattr(contract, "inheritance", []) or [])
+    # Chain: root first (distance 0), then BFS by immediate inheritance distance
+    # This guarantees most-derived (closest to root) wins, handling diamond tie
+    # correctly via linearized order.
+    chain_ordered: list[Contract] = []
+    seen: set[int] = set()
+    # BFS from root outward to compute distance; queue holds (contract, distance)
+    from collections import deque
 
-    # Collect ALL override candidates from root_contract, its parents,
-    # and derived contracts, then pick the most-derived one.
-    candidates: List[tuple[Contract, Function]] = []
+    queue: deque[tuple[Contract, int]] = deque()
+    queue.append((root_contract, 0))
+    seen.add(id(root_contract))
+    # Map contract -> distance
+    dist: dict[int, int] = {id(root_contract): 0}
+    # Use inheritance graph: for each contract, its immediate parents are immediate_inheritance
+    # If not available, fall back to inheritance list.
+    while queue:
+        cur, d = queue.popleft()
+        chain_ordered.append(cur)
+        immediates = getattr(cur, "immediate_inheritance", None)
+        if immediates is None:
+            # Fallback: use inheritance but we need to avoid large explosion; just use direct inheritance of root for first level
+            if cur is root_contract:
+                immediates = getattr(root_contract, "inheritance", []) or []
+                # For deeper levels, we can't reliably expand, so stop BFS after first level
+                # Instead, fill chain_ordered with root + linearized inheritance in original order
+                # To preserve C3, we append remaining inheritance not yet seen in order
+                for base in immediates:
+                    if id(base) not in seen:
+                        seen.add(id(base))
+                        dist[id(base)] = d + 1
+                        chain_ordered.append(base)
+                break
+            else:
+                immediates = []
+        for base in immediates or []:
+            if id(base) not in seen:
+                seen.add(id(base))
+                dist[id(base)] = d + 1
+                queue.append((base, d + 1))
 
-    root_override = _find_override(root_contract)
-    if root_override is not None and root_override is not target:
-        candidates.append((root_contract, root_override))
-
+    # If BFS didn't cover all inheritance (single-file case where linearized is empty),
+    # ensure every base in inheritance is in chain_ordered in linearization order
     for base in getattr(root_contract, "inheritance", []) or []:
-        parent_override = _find_override(base)
-        if parent_override is not None:
-            candidates.append((base, parent_override))
+        if id(base) not in seen:
+            chain_ordered.append(base)
 
-    if all_contracts is not None and target_contract is not None:
-        for contract in all_contracts:
-            if contract is root_contract or contract is target_contract:
-                continue
-            inheritance = getattr(contract, "inheritance", []) or []
-            if target_contract not in inheritance:
-                continue
-            derived_override = _find_override(contract)
-            if derived_override is not None:
-                candidates.append((contract, derived_override))
-
-    if candidates:
-        best_contract, best_override = max(
-            candidates,
-            key=lambda pair: _inheritance_depth(pair[0]),
-        )
-        return best_override
+    # Now scan chain_ordered from most-derived outward (chain_ordered is BFS order, root first)
+    for contract in chain_ordered:
+        ov = _find_override(contract)
+        if ov is not None:
+            return ov
 
     return target
 
