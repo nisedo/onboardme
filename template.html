@@ -3033,7 +3033,14 @@
             } else if (resolvedKey) {
               result += `<span class="token-function">${escapeHtml(name)}</span>`;
             } else {
-              result += escapeHtml(name);
+              // Not a resolvable function name: inside signature tails this
+              // is typically an argument passed to a modifier
+              // (e.g. nonZeroAddress(receiver)) or a returns-value name
+              // (returns (uint256 shares)). Wrap exactly like body
+              // occurrences so hover preview, occurrence highlighting and
+              // locking work in signatures too.
+              const escapedName = escapeHtml(name);
+              result += `<span class="variable-token${scopeClassForName(name)}" data-var="${escapedName}"${scopeAttrForName(name)}>${escapedName}</span>`;
             }
           } else {
             const escapedName = escapeHtml(name);
