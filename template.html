@@ -3469,30 +3469,86 @@
       return lines.map((line) => line.slice(minIndent));
     };
 
+    // True when, after scanning `text`, the lexer is back at top-level code
+    // (not inside a block comment or string/template literal). Used to keep
+    // truncated previews lexically self-contained so they highlight exactly
+    // like real code.
+    const snippetEndsClean = (text) => {
+      let inBlock = false, inSingle = false, inDouble = false, inTemplate = false, inLine = false, escape = false;
+      for (let i = 0; i < text.length; i += 1) {
+        const ch = text[i];
+        const next = text[i + 1] || '';
+        if (escape) { escape = false; continue; }
+        if (inBlock) {
+          if (ch === '*' && next === '/') { inBlock = false; i += 1; }
+          continue;
+        }
+        if (inLine) {
+          if (ch === '\n') inLine = false;
+          continue;
+        }
+        if (inSingle) {
+          if (ch === '\\') escape = true;
+          else if (ch === "'") inSingle = false;
+          continue;
+        }
+        if (inDouble) {
+          if (ch === '\\') escape = true;
+          else if (ch === '"') inDouble = false;
+          continue;
+        }
+        if (inTemplate) {
+          if (ch === '\\') escape = true;
+          else if (ch === '`') inTemplate = false;
+          continue;
+        }
+        if (ch === '/' && next === '/') { inLine = true; i += 1; continue; }
+        if (ch === '/' && next === '*') { inBlock = true; i += 1; continue; }
+      }
+      return !inBlock && !inSingle && !inDouble && !inTemplate;
+    };
+
     const renderTooltipSnippet = (source = '', maxLines = 6, maxChars = 420) => {
       if (!source) return '';
-      let trimmed = source.trim();
-      if (!trimmed) return '';
-      if (trimmed.length > maxChars) trimmed = `${trimmed.slice(0, maxChars)}…`;
-      let lines = normalizeSnippetIndent(trimmed);
-      let truncatedTail = false;
-      if (lines.length > maxLines) {
-        lines = lines.slice(0, maxLines);
-        truncatedTail = true;
+      let lines = normalizeSnippetIndent(source.trim());
+      if (!lines.length || (lines.length === 1 && !lines[0].trim())) return '';
+
+      // Char budget: never cut mid-line. A partial line can split a block
+      // comment or string opener and desynchronize the stateful highlighter,
+      // making the preview render differently than real code.
+      let used = 0;
+      let dropped = false;
+      const kept = [];
+      for (let i = 0; i < lines.length; i += 1) {
+        const cost = lines[i].length + 1;
+        if (kept.length && used + cost > maxChars) { dropped = true; break; }
+        kept.push(lines[i]);
+        used += cost;
       }
-      // THE fix: previews run through the exact same rendering function as
-      // code widgets (same tokenizer, same per-class post-processing, same
-      // variable wrapping, same signature-tail resolution via the ambient
-      // functionInfo of the flow on screen). interactive:false only swaps
-      // <button> links for same-color spans; it can never change colors.
+
+      // Line budget.
+      let selected = kept;
+      if (selected.length > maxLines) {
+        selected = selected.slice(0, maxLines);
+        dropped = true;
+      }
+
+      // Drop trailing lines that would END inside an open block comment or
+      // string literal (their closer was truncated away), so the preview is
+      // lexically self-contained and highlights exactly like real code.
+      while (selected.length > 1 && !snippetEndsClean(selected.join('\n'))) {
+        selected.pop();
+        dropped = true;
+      }
+
       const { highlightedLines } = renderCodeBlock(
-        lines.join('\n'), ambientFunctionInfo, null, [], '',
+        selected.join('\n'), ambientFunctionInfo, null, [], '',
         { mode: 'highlight', interactive: false }
       );
       const out = highlightedLines.map(
         (html) => `<span class="var-tooltip-line">${html}</span>`
       );
-      if (truncatedTail) {
+      if (dropped) {
         out.push('<span class="var-tooltip-line text-slate-500">…</span>');
       }
       return out.join('\n');
