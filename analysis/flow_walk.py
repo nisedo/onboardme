@@ -14,6 +14,7 @@ from slither.core.declarations import Contract, FunctionContract
 from slither.core.declarations.function import Function
 from slither.core.declarations.modifier import Modifier
 from slither.core.declarations.solidity_variables import SolidityFunction, SolidityVariableComposed
+from slither.core.expressions.super_call_expression import SuperCallExpression
 from slither.core.variables.local_variable import LocalVariable
 from slither.core.variables.state_variable import StateVariable
 from slither.slithir.operations.condition import Condition
@@ -839,6 +840,10 @@ def _resolve_unimplemented_call(
         return None
 
     # First, resolve using the main (root) contract, then walk its parents.
+    # Strict deployed-type semantics: only the root's own C3 chain may provide
+    # the implementation.  Siblings beyond root (e.g. PoolV3_USDT while the
+    # deployed root is PoolV3) do not exist at the deployed address and must
+    # not be considered.
     if root_contract is not None:
         search_contracts: List[Contract] = [root_contract]
         search_contracts.extend(getattr(root_contract, "inheritance", []))
@@ -846,9 +851,10 @@ def _resolve_unimplemented_call(
             resolved = _find_implemented(base)
             if resolved is not None:
                 return resolved
+        return target
 
     # If no root contract is provided, fall back to the caller's contract then parents.
-    if root_contract is None and caller_contract is not None:
+    if caller_contract is not None:
         resolved = _find_implemented(caller_contract)
         if resolved is not None:
             return resolved
@@ -857,7 +863,9 @@ def _resolve_unimplemented_call(
             if resolved is not None:
                 return resolved
 
-    # Finally, try any derived contracts in the compilation unit.
+    # Last resort (no root, no caller contract): any derived contract in the
+    # compilation unit.  Never reached when analyzing a concrete root, which
+    # must implement all inherited functions within its own chain.
     resolved = _find_descendant_override()
     if resolved is not None:
         return resolved
@@ -872,34 +880,122 @@ def _resolve_override_call(
     root_contract: Contract | None,
     all_contracts: Sequence[Contract] | None = None,
 ) -> Union[Function, Modifier, None]:
-    """Resolve virtual calls to the most-derived override on the root contract."""
+    """Resolve virtual calls to the most-derived override on the root contract.
+
+    Strict virtual-dispatch resolver following Solidity semantics:
+
+    - Non-virtual calls keep Slither's statically-bound target:
+        * `super.foo()` / `ContractName.foo()` are detected per call site via the
+          IR expression source (never the whole caller body, which may mix
+          qualified and virtual calls on the same statement).
+        * Library calls (`using X for T`) and external (high-level) calls are not
+          internal virtual dispatch.  In particular `this.foo()` compiles to an
+          external call to the deployed address; the executed entry point is the
+          root's most-derived `foo`, which solc already statically binds, so the
+          target needs no adjustment.
+    - Virtual internal calls resolve to the most-derived implemented override in
+      the *deployed* `root_contract` C3 linearization only (`[root] + root.inheritance`,
+      which Slither materializes from solc's `linearizedBaseContracts`).  Siblings
+      beyond root (e.g. `PoolV3_USDT is PoolV3` while analyzing PoolV3) are NOT
+      considered: if PoolV3 is the deployed root, PoolV3_USDT does not exist.
+        * root=PoolV3  -> PoolV3.deposit, never ERC4626, never PoolV3_USDT
+        * root=PoolV3_USDT -> PoolV3_USDT._amountMinusFee for inherited PoolV3 code.
+      Works for both local (`Slither(path)`) and on-chain (`Slither(crytic-export)`)
+      analyses because only `root_contract` and its bases are used; `all_contracts`
+      is intentionally ignored for implemented virtual calls.  Unimplemented
+      interface resolution is handled separately by `_resolve_unimplemented_call`.
+    """
     if target is None or root_contract is None:
         return target
     if not isinstance(target, Function):
         return target
-    call_type = str(getattr(call_obj, "type_call", "") or "").lower()
-    if "super" in call_type:
+
+    # External high-level calls and library calls never participate in internal
+    # virtual dispatch. `this.foo()` (HighLevelCall, destination=this) already
+    # carries the most-derived entry point as its target.
+    if isinstance(call_obj, (LibraryCall, HighLevelCall)):
         return target
-    target_name = getattr(target, "name", None)
-    if target_name:
-        source_text = _source_text(caller)
-        if source_text:
-            super_pattern = r"\bsuper\s*\.\s*" + re.escape(target_name) + r"\s*\("
-            if re.search(super_pattern, source_text):
-                return target
-            contract_name = ""
-            if getattr(target, "contract_declarer", None) is not None:
-                contract_name = getattr(target.contract_declarer, "name", "") or ""
-            if contract_name:
-                contract_pattern = r"\b" + re.escape(contract_name) + r"\s*\.\s*" + re.escape(target_name) + r"\s*\("
-                if re.search(contract_pattern, source_text):
-                    return target
-    target_contract = getattr(target, "contract_declarer", None) or getattr(target, "contract", None)
+
+    # 1) Non-virtual detection per call site.
+    # `super.foo()` is pinned by solc; Slither exposes the expression type.
+    expression = getattr(call_obj, "expression", None)
+    if isinstance(expression, SuperCallExpression):
+        return target
+
+    # Qualified calls (`AncestorName.foo(...)`) are non-virtual too. Prefer the
+    # precise call-site source from the IR expression; fall back to the node
+    # statement text only when no expression source is available. Plain Function
+    # objects (synthetic fallback calls with no IR) are never qualified by
+    # construction: the fallback scanner excludes `super.`/`Contract.` prefixed
+    # matches, so they are always treated as virtual.
+    target_name = getattr(target, "name", None) or ""
+    call_src = ""
+    if expression is not None:
+        try:
+            call_src = _source_text(expression) or ""
+        except Exception:
+            call_src = ""
+    if not call_src:
+        node = getattr(call_obj, "node", None)
+        if node is not None:
+            try:
+                call_src = _source_text(node) or ""
+            except Exception:
+                call_src = ""
+
+    if call_src and target_name:
+        ancestor_names: Set[str] = set()
+        try:
+            for contract in [root_contract] + list(
+                getattr(root_contract, "inheritance", []) or []
+            ):
+                name = getattr(contract, "name", "") or ""
+                if name:
+                    ancestor_names.add(name)
+        except Exception:
+            ancestor_names = set()
+        qualified_pattern = (
+            r"\b(?:super"
+            + ("|" + "|".join(re.escape(name) for name in ancestor_names)
+               if ancestor_names else "")
+            + r")\s*\.\s*"
+            + re.escape(target_name)
+            + r"\s*(?:\{[^}]*\}\s*)?\("
+        )
+        if re.search(qualified_pattern, call_src):
+            return target
+
+    # 2) Virtual dispatch: most-derived implemented override in root's C3
+    #    linearization. Slither's `inheritance` is C3-ordered
+    #    (linearizedBaseContracts[1:] from solc), so [root] + inheritance is the
+    #    strict linearization; scanning in order and returning the first
+    #    implemented match is exactly "most derived wins".
+    chain_ordered: List[Contract] = [root_contract] + list(
+        getattr(root_contract, "inheritance", []) or []
+    )
+    chain_set: Set[Contract] = set(chain_ordered)
 
     target_signature = getattr(target, "solidity_signature", None)
+
+    # Primary: Slither's own C3-aware signature resolver.
+    if target_signature:
+        try:
+            most_derived = root_contract.get_function_from_signature(target_signature)  # type: ignore[attr-defined]
+            if most_derived is not None and getattr(most_derived, "is_implemented", True):
+                decl = getattr(most_derived, "contract_declarer", None) or getattr(
+                    most_derived, "contract", None
+                )
+                if decl in chain_set:
+                    return most_derived
+        except Exception:
+            pass
+
+    # Fallback: manual scan of the strict C3 chain (root first).
     target_full_name = getattr(target, "full_name", None)
-    target_name = getattr(target, "name", None)
-    target_param_types = [str(getattr(p, "type", "")) for p in (getattr(target, "parameters", None) or [])]
+    target_name_only = getattr(target, "name", None)
+    target_param_types = [
+        str(getattr(p, "type", "")) for p in (getattr(target, "parameters", None) or [])
+    ]
 
     def _matches_signature(fn: Function) -> bool:
         fn_sig = getattr(fn, "solidity_signature", None)
@@ -909,7 +1005,7 @@ def _resolve_override_call(
         if target_full_name and fn_full_name:
             return fn_full_name == target_full_name
         fn_name = getattr(fn, "name", None)
-        if target_name and fn_name and fn_name != target_name:
+        if target_name_only and fn_name and fn_name != target_name_only:
             return False
         if target_param_types:
             params = getattr(fn, "parameters", None) or []
@@ -930,41 +1026,10 @@ def _resolve_override_call(
                 return fn
         return None
 
-    def _inheritance_depth(contract: Contract | None) -> int:
-        if contract is None:
-            return -1
-        return len(getattr(contract, "inheritance", []) or [])
-
-    # Collect ALL override candidates from root_contract, its parents,
-    # and derived contracts, then pick the most-derived one.
-    candidates: List[tuple[Contract, Function]] = []
-
-    root_override = _find_override(root_contract)
-    if root_override is not None and root_override is not target:
-        candidates.append((root_contract, root_override))
-
-    for base in getattr(root_contract, "inheritance", []) or []:
-        parent_override = _find_override(base)
-        if parent_override is not None:
-            candidates.append((base, parent_override))
-
-    if all_contracts is not None and target_contract is not None:
-        for contract in all_contracts:
-            if contract is root_contract or contract is target_contract:
-                continue
-            inheritance = getattr(contract, "inheritance", []) or []
-            if target_contract not in inheritance:
-                continue
-            derived_override = _find_override(contract)
-            if derived_override is not None:
-                candidates.append((contract, derived_override))
-
-    if candidates:
-        best_contract, best_override = max(
-            candidates,
-            key=lambda pair: _inheritance_depth(pair[0]),
-        )
-        return best_override
+    for contract in chain_ordered:
+        override = _find_override(contract)
+        if override is not None:
+            return override
 
     return target
 
@@ -1083,6 +1148,8 @@ def _walk_callable(
             _add_call(call)
 
     # Fallback: scan source for internal/private calls Slither may miss.
+    # Negative lookbehind excludes `super._foo(` / `Base._foo(` qualified calls:
+    # those are not virtual and must not be re-resolved to a derived override.
     caller_contract = getattr(item, "contract_declarer", None) or getattr(item, "contract", None)
     if caller_contract is not None:
         candidates = [caller_contract]
@@ -1095,7 +1162,7 @@ def _walk_callable(
                     fn_by_name.setdefault(name, fn)
         source_text = _source_text(item)
         if source_text:
-            for match in re.finditer(r"\b(_[A-Za-z0-9_]*)\s*\(", source_text):
+            for match in re.finditer(r"(?<![.\w])(_[A-Za-z0-9_]*)\s*\(", source_text):
                 fallback_fn = fn_by_name.get(match.group(1))
                 if fallback_fn is not None:
                     _add_call(fallback_fn)
@@ -1155,7 +1222,12 @@ def _entry_points_by_predicate(
             continue
         if function.is_shadowed:
             continue
-        if hasattr(function, "is_implemented") and not function.is_implemented:
+        if hasattr(function, "is_implemented") and function.is_implemented is False:
+            # Genuinely unimplemented (abstract) declarations are never callable.
+            # `None` must be KEPT: in flattened verification bundles Slither
+            # marks interface declarations that solc actually implements via
+            # auto-generated public state-variable getters as None, and those
+            # getters are real entry points of the deployed contract.
             continue
         if not is_selected(function):
             continue
@@ -1166,9 +1238,16 @@ def _entry_points_by_predicate(
 def _iter_audited_contracts(
     slither: Slither,
     root_contracts: Sequence[Contract] | None = None,
+    use_all_contracts: bool = False,
 ) -> Sequence[Contract]:
-    """Yield concrete, non-test contracts to inspect."""
-    allowed_keys: Set[tuple[str, str]] | None = None
+    """Yield concrete, non-test contracts to inspect.
+
+    `root_contracts` restricts candidates to the roots plus their C3 inheritance.
+    `use_all_contracts` (used when the deployed contract could not be identified
+    and the most-derived heuristic may hide it behind a sibling) falls back to
+    every contract instead of only `contracts_derived`.
+    """
+    allowed_keys: Set[tuple] | None = None
     if root_contracts:
         allowed_keys = set()
         for root in root_contracts:
@@ -1176,14 +1255,26 @@ def _iter_audited_contracts(
             for base in getattr(root, "inheritance", []):
                 allowed_keys.add(_contract_key(base))
 
-    candidates = slither.contracts if allowed_keys is not None else slither.contracts_derived
+    if allowed_keys is not None:
+        candidates = slither.contracts
+    else:
+        candidates = slither.contracts if use_all_contracts else slither.contracts_derived
+
+    def _allowed(contract: Contract) -> bool:
+        # Dependency (library) bases in the root's own chain are real deployed
+        # code (e.g. OpenZeppelin ERC4626 in a crytic-export bundle) and must be
+        # visible to shadow/override detection. Everything else from dependencies
+        # stays excluded.
+        if allowed_keys is not None and _contract_key(contract) in allowed_keys:
+            return True
+        return not contract.is_from_dependency()
 
     return sorted(
         (
             contract
             for contract in candidates
             if not contract.is_test
-            and not contract.is_from_dependency()
+            and _allowed(contract)
             and not is_test_file(Path(contract.source_mapping.filename.absolute))
             and not contract.is_interface
             and not contract.is_library
@@ -1315,6 +1406,27 @@ def _build_entry_point_flows(
                 for v in state_vars_written
             ]
 
+            # Auto-generated public state-variable getters in flattened
+            # verification bundles are modeled by Slither as bodyless interface
+            # functions. Surface the underlying state variable read so the
+            # storage panel is accurate for these real entry points.
+            if not getattr(entry_point, "nodes", None):
+                getter_var = next(
+                    (
+                        var
+                        for var in getattr(contract, "state_variables", []) or []
+                        if var.name == getattr(entry_point, "name", None)
+                        and getattr(var, "visibility", "") == "public"
+                    ),
+                    None,
+                )
+                if getter_var is not None:
+                    record = _state_var_record(getter_var)
+                    key = record.get("qualified_name") or record.get("name", "")
+                    if key and key not in state_vars_read_keys:
+                        state_vars_read.append(record)
+                        state_vars_read_keys.append(key)
+
             _walk_callable(
                 entry_point,
                 visited,
@@ -1335,6 +1447,16 @@ def _build_entry_point_flows(
                         target_fn, "contract", None
                     )
                     if target_contract is not None and getattr(target_contract, "is_library", False):
+                        continue
+                    # Auto-generated public state-variable getters are modeled
+                    # as bodyless interface functions in flattened bundles;
+                    # they ARE implemented by solc, so they are not a warning.
+                    is_getter = any(
+                        var.name == getattr(target_fn, "name", None)
+                        and getattr(var, "visibility", "") == "public"
+                        for var in getattr(contract, "state_variables", []) or []
+                    )
+                    if is_getter:
                         continue
                     if item["name"] not in reported_unimplemented:
                         print(f"Function not implemented: {item['name']}")

@@ -54,10 +54,24 @@ def _function_selector(item: Any) -> str | None:
         return None
 
 
-def _contract_key(contract: Any) -> tuple[str, str]:
-    """Stable contract identity key (name + source file)."""
+def _contract_key(contract: Any) -> tuple[str, str, Any, Any]:
+    """Stable contract identity key (name + source file + source offsets).
+
+    Flattened verification bundles can declare several contracts in a single
+    file, so (name, filename) alone would collide; the source offsets keep
+    distinct contracts distinct.  Offsets are None when unavailable, in which
+    case the key degrades to (name, filename).
+    """
     sm = getattr(contract, "source_mapping", None)
     filename = ""
+    start = None
+    length = None
     if sm and getattr(sm, "filename", None):
         filename = getattr(sm.filename, "absolute", "") or str(sm.filename)
-    return (contract.name, filename)
+        try:
+            start = getattr(sm, "start", None)
+            length = getattr(sm, "length", None)
+        except Exception:
+            start = None
+            length = None
+    return (contract.name, filename, start, length)

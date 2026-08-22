@@ -879,21 +879,13 @@
     .var-tooltip-line {
     display: block;
     white-space: pre;
-    color: #94a3b8;
-    /* Muted code color by default */
-    }
-
-    /* Highlight overrides inside tooltip */
-    .var-tooltip-line .token-keyword {
-    color: #c084fc;
-    }
-
-    .var-tooltip-line .token-type {
-    color: #f59e0b;
-    }
-
-    .var-tooltip-line .token-function {
-    color: #22d3ee;
+    color: #cbd5e1;
+    /* Same base code color as code widgets (.text-slate-300).
+       Token spans intentionally get NO scoped overrides here: previews must
+       resolve through the exact same .token-* / .variable-token cascade as
+       code widgets (adding scoped rules would change specificity and shift
+       colors - e.g. .var-tooltip-line .token-constant beating
+       .variable-token turns interface names orange instead of white). */
     }
 
     .audit-toggle {
@@ -2688,39 +2680,152 @@
       return map;
     };
 
+    // Single source of truth for Solidity tokenization. Both code widgets and
+    // preview tooltips render through renderCodeBlock's highlighter, which is
+    // the ONLY consumer of this list - previews cannot drift from blocks.
+    const identifierPattern = /[_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*/g;
+    const reservedWords = new Set([
+      'var', 'import', 'function', 'constant', 'view', 'pure', 'payable', 'storage', 'memory',
+      'if', 'else', 'for', 'while', 'do', 'break', 'continue', 'return', 'returns',
+      'private', 'public', 'internal', 'external', 'inherited', 'this', 'suicide', 'selfdestruct',
+      'emit', 'new', 'is', 'delete', 'throw', 'revert', 'assert', 'require', 'contract', 'interface',
+      'library', 'using', 'struct', 'modifier',
+      'address', 'string', 'bool', 'mapping',
+      'onlyOwner', 'onlyRole', 'nonReentrant', 'override', 'virtual'
+    ]);
+    const solidityGlobals = new Set([
+      'msg', 'tx', 'block', 'abi', 'this', 'super'
+    ]);
+
+    const isReservedIdentifier = (name) => {
+      if (name === '_') return true;
+      if (reservedWords.has(name)) return true;
+      if (solidityGlobals.has(name)) return true;
+      if (/^bytes\d+$/i.test(name)) return true;
+      if (/^u?int\d*$/i.test(name)) return true;
+      if (/^u?fixed\d+x\d+$/i.test(name)) return true;
+      return false;
+    };
+
+    const isBuiltinMemberAccess = (text, matchIndex, name) => {
+      let i = matchIndex - 1;
+      while (i >= 0 && /\s/.test(text[i])) i -= 1;
+      if (i < 0 || text[i] !== '.') return false;
+      if (name === 'length') return true;
+      if (name === 'max' || name === 'min') {
+        let j = i - 1;
+        while (j >= 0 && /\s/.test(text[j])) j -= 1;
+        if (j >= 0 && text[j] === ')') {
+          let depth = 0;
+          let k = j;
+          while (k >= 0) {
+            const ch = text[k];
+            if (ch === ')') depth += 1;
+            else if (ch === '(') {
+              depth -= 1;
+              if (depth === 0) break;
+            }
+            k -= 1;
+          }
+          if (k >= 0) {
+            let t = k - 1;
+            while (t >= 0 && /\s/.test(text[t])) t -= 1;
+            const start = t - 3;
+            if (start >= 0 && text.slice(start, t + 1) === 'type') {
+              const prev = start > 0 ? text[start - 1] : '';
+              if (!/[$\w\xA0-\uFFFF]/.test(prev)) return true;
+            }
+          }
+        }
+      }
+      i -= 1;
+      while (i >= 0 && /\s/.test(text[i])) i -= 1;
+      if (i < 0) return false;
+      let end = i + 1;
+      while (i >= 0 && /[$\w\xA0-\uFFFF]/.test(text[i])) i -= 1;
+      const start = i + 1;
+      if (start >= end) return false;
+      const base = text.slice(start, end);
+      return solidityGlobals.has(base);
+    };
+
+    const TOKEN_PATTERNS = [
+      { className: 'token-comment', regex: /\/\/.*/g },
+      { className: 'token-comment', regex: /\/\*[\s\S]*?\*\//g },
+      { className: 'token-string', regex: /`(?:\\[\s\S]|[^\\`])*`|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/g },
+      { className: 'token-regex', regex: /\/(?:\[[^\]\r\n]+]|\\.|[^/\\\[\r\n])+\/[gimyu]{0,5}(?=\s*(?:$|[,\r\n.;})\]]))/g },
+      { className: 'token-keyword', regex: /\b(?:var|import|function|constant|view|pure|payable|storage|memory|if|else|for|while|do|break|continue|returns?|private|public|internal|external|inherited|this|suicide|selfdestruct|emit|new|is|delete|throw|revert|assert|require|contract|interface|library|using|struct|modifier|return)\b/g },
+      { className: 'token-function', regex: /[_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*(?=\s*=\s*(?:function\b|(?:\([^()]*\)|[_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*)\s*=>))/g },
+      { className: 'token-type', regex: /\b(?:address|string|bytes\d*|int\d*|uint\d*|bool|u?fixed\d+x\d+|mapping)\b/g },
+      { className: 'token-constant', regex: /\b[A-Z][A-Z\d_]*\b/g },
+      { className: 'token-number', regex: /\b(?:0[xX][\dA-Fa-f]+|0[bB][01]+|0[oO][0-7]+|NaN|Infinity)\b|(?:\b\d+\.?\d*|\B\.\d+)(?:[Ee][+-]?\d+)?/g },
+      { className: 'token-function', regex: /[_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*(?=\s*\()/g },
+      { className: 'token-operator', regex: /-[-=]?|\+[+=]?|!=?=?|<<?=?|>>?>?=?|=(?:==?|>)?|&[&=]?|\|[|=]?|\*\*?=?|\/=?|~|\^=?|%=?|\?|\.{3}/g },
+      { className: 'token-modifier', regex: /\b(?:onlyOwner|onlyRole|nonReentrant|override|payable|view|pure|virtual)\b/g }
+    ];
+
+    const findBlockCommentStart = (line, fromIndex = 0) => {
+      let inSingle = false;
+      let inDouble = false;
+      let inTemplate = false;
+      let escape = false;
+      for (let i = fromIndex; i < line.length - 1; i += 1) {
+        const ch = line[i];
+        if (escape) {
+          escape = false;
+          continue;
+        }
+        if (inSingle) {
+          if (ch === "\\") escape = true;
+          else if (ch === "'") inSingle = false;
+          continue;
+        }
+        if (inDouble) {
+          if (ch === "\\") escape = true;
+          else if (ch === '"') inDouble = false;
+          continue;
+        }
+        if (inTemplate) {
+          if (ch === "\\") escape = true;
+          else if (ch === "`") inTemplate = false;
+          continue;
+        }
+        if (ch === "'") {
+          inSingle = true;
+          continue;
+        }
+        if (ch === '"') {
+          inDouble = true;
+          continue;
+        }
+        if (ch === "`") {
+          inTemplate = true;
+          continue;
+        }
+        if (ch === "/" && line[i + 1] === "/") return -1;
+        if (ch === "/" && line[i + 1] === "*") return i;
+      }
+      return -1;
+    };
+
     const codeBlockCache = new Map();
-    const renderCodeBlock = (code, functionInfo = null, variableScopeMap = null, variableRecords = [], originNodeId = '') => {
+    const renderCodeBlock = (code, functionInfo = null, variableScopeMap = null, variableRecords = [], originNodeId = '', opts = {}) => {
       const lineHeight = 'var(--code-line-height, 14px)';
       const escapeHtml = (unsafe) => unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+      // Single rendering path for code widgets AND preview tooltips:
+      //   mode:'highlight'      -> return { lines, highlightedLines } only
+      //   interactive:false     -> never emit <button> links; emit the
+      //                            same-color <span class="token-*"> instead
+      // Tooltips call this with { mode:'highlight', interactive:false }, so
+      // preview syntax highlighting can never drift from code blocks again.
+      const highlightOnly = opts.mode === 'highlight';
+      const interactiveOpts = opts.interactive !== false;
       const functionNameArityMap = functionInfo?.nameArityMap || new Map();
       const uniqueFunctionNames = functionInfo?.uniqueNames || new Set();
       const knownContractsLower = functionInfo?.knownContractsLower || new Set();
       const scopeLookup = variableScopeMap || {};
       const varInfoMap = buildVarInfoMap(variableRecords);
       const varInfoJson = escapeHtml(JSON.stringify(varInfoMap));
-      const identifierPattern = /[_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*/g;
-      const reservedWords = new Set([
-        'var', 'import', 'function', 'constant', 'view', 'pure', 'payable', 'storage', 'memory',
-        'if', 'else', 'for', 'while', 'do', 'break', 'continue', 'return', 'returns',
-        'private', 'public', 'internal', 'external', 'inherited', 'this', 'suicide', 'selfdestruct',
-        'emit', 'new', 'is', 'delete', 'throw', 'revert', 'assert', 'require', 'contract', 'interface',
-        'library', 'using', 'struct', 'modifier',
-        'address', 'string', 'bool', 'mapping',
-        'onlyOwner', 'onlyRole', 'nonReentrant', 'override', 'virtual'
-      ]);
-      const solidityGlobals = new Set([
-        'msg', 'tx', 'block', 'abi', 'this', 'super'
-      ]);
-
-      const isReservedIdentifier = (name) => {
-        if (name === '_') return true;
-        if (reservedWords.has(name)) return true;
-        if (solidityGlobals.has(name)) return true;
-        if (/^bytes\d+$/i.test(name)) return true;
-        if (/^u?int\d*$/i.test(name)) return true;
-        if (/^u?fixed\d+x\d+$/i.test(name)) return true;
-        return false;
-      };
 
       const resolveFunctionLinkKey = (name, arity, allowLink = true) => {
         if (!allowLink || !functionInfo) return '';
@@ -2730,48 +2835,6 @@
         const hasArityMatch = arity !== null && aritySet && aritySet.has(arity);
         const isUniqueName = uniqueFunctionNames.has(tokenKey);
         return hasArityMatch ? `${tokenKey}:${arity}` : (isUniqueName ? tokenKey : '');
-      };
-
-      const isBuiltinMemberAccess = (text, matchIndex, name) => {
-        let i = matchIndex - 1;
-        while (i >= 0 && /\s/.test(text[i])) i -= 1;
-        if (i < 0 || text[i] !== '.') return false;
-        if (name === 'length') return true;
-        if (name === 'max' || name === 'min') {
-          let j = i - 1;
-          while (j >= 0 && /\s/.test(text[j])) j -= 1;
-          if (j >= 0 && text[j] === ')') {
-            let depth = 0;
-            let k = j;
-            while (k >= 0) {
-              const ch = text[k];
-              if (ch === ')') depth += 1;
-              else if (ch === '(') {
-                depth -= 1;
-                if (depth === 0) break;
-              }
-              k -= 1;
-            }
-            if (k >= 0) {
-              let t = k - 1;
-              while (t >= 0 && /\s/.test(text[t])) t -= 1;
-              const start = t - 3;
-              if (start >= 0 && text.slice(start, t + 1) === 'type') {
-                const prev = start > 0 ? text[start - 1] : '';
-                if (!/[$\w\xA0-\uFFFF]/.test(prev)) return true;
-              }
-            }
-          }
-        }
-        i -= 1;
-        while (i >= 0 && /\s/.test(text[i])) i -= 1;
-        if (i < 0) return false;
-        let end = i + 1;
-        while (i >= 0 && /[$\w\xA0-\uFFFF]/.test(text[i])) i -= 1;
-        const start = i + 1;
-        if (start >= end) return false;
-        const base = text.slice(start, end);
-        return solidityGlobals.has(base);
       };
 
       const scopeAttrForName = (name) => {
@@ -2965,10 +3028,19 @@
             result += escapeHtml(name);
           } else if (inSignatureTail) {
             const resolvedKey = resolveFunctionLinkKey(name, 0, true);
-            if (resolvedKey) {
+            if (resolvedKey && interactiveOpts) {
               result += `<button type="button" class="token-function function-link" data-fn-key="${resolvedKey}" data-fn-name="${escapeHtml(name)}"${originAttr}>${escapeHtml(name)}</button>`;
+            } else if (resolvedKey) {
+              result += `<span class="token-function">${escapeHtml(name)}</span>`;
             } else {
-              result += escapeHtml(name);
+              // Not a resolvable function name: inside signature tails this
+              // is typically an argument passed to a modifier
+              // (e.g. nonZeroAddress(receiver)) or a returns-value name
+              // (returns (uint256 shares)). Wrap exactly like body
+              // occurrences so hover preview, occurrence highlighting and
+              // locking work in signatures too.
+              const escapedName = escapeHtml(name);
+              result += `<span class="variable-token${scopeClassForName(name)}" data-var="${escapedName}"${scopeAttrForName(name)}>${escapedName}</span>`;
             }
           } else {
             const escapedName = escapeHtml(name);
@@ -3141,23 +3213,8 @@
       };
 
       const highlightLine = (line, lineIndex, baseOffset = 0, fullLine = line) => {
-        const tokenPatterns = [
-          { className: 'token-comment', regex: /\/\/.*/g },
-          { className: 'token-comment', regex: /\/\*[\s\S]*?\*\//g },
-          { className: 'token-string', regex: /`(?:\\[\s\S]|[^\\`])*`|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/g },
-          { className: 'token-regex', regex: /\/(?:\[[^\]\r\n]+]|\\.|[^/\\\[\r\n])+\/[gimyu]{0,5}(?=\s*(?:$|[,\r\n.;})\]]))/g },
-          { className: 'token-keyword', regex: /\b(?:var|import|function|constant|view|pure|payable|storage|memory|if|else|for|while|do|break|continue|returns?|private|public|internal|external|inherited|this|suicide|selfdestruct|emit|new|is|delete|throw|revert|assert|require|contract|interface|library|using|struct|modifier|return)\b/g },
-          { className: 'token-function', regex: /[_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*(?=\s*=\s*(?:function\b|(?:\([^()]*\)|[_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*)\s*=>))/g },
-          { className: 'token-type', regex: /\b(?:address|string|bytes\d*|int\d*|uint\d*|bool|u?fixed\d+x\d+|mapping)\b/g },
-          { className: 'token-constant', regex: /\b[A-Z][A-Z\d_]*\b/g },
-          { className: 'token-number', regex: /\b(?:0[xX][\dA-Fa-f]+|0[bB][01]+|0[oO][0-7]+|NaN|Infinity)\b|(?:\b\d+\.?\d*|\B\.\d+)(?:[Ee][+-]?\d+)?/g },
-          { className: 'token-function', regex: /[_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*(?=\s*\()/g },
-          { className: 'token-operator', regex: /-[-=]?|\+[+=]?|!=?=?|<<?=?|>>?>?=?|=(?:==?|>)?|&[&=]?|\|[|=]?|\*\*?=?|\/=?|~|\^=?|%=?|\?|\.{3}/g },
-          { className: 'token-modifier', regex: /\b(?:onlyOwner|onlyRole|nonReentrant|override|payable|view|pure|virtual)\b/g }
-        ];
-
         const tokens = [];
-        tokenPatterns.forEach(({ className, regex }, priority) => {
+        TOKEN_PATTERNS.forEach(({ className, regex }, priority) => {
           regex.lastIndex = 0;
           let match;
           while ((match = regex.exec(line)) !== null) {
@@ -3189,44 +3246,46 @@
           result += wrapVariables(line.slice(cursor, token.start), globalOffset, signatureIndex);
           if (token.className === 'token-function') {
             const tokenKey = normalizeFunctionKey(token.text);
-            if (tokenKey && functionInfo) {
-              const absoluteStart = baseOffset + token.start;
-              const isDeclaration = isFunctionDeclaration(fullLine, absoluteStart);
-              const isEmit = isEmitCall(fullLine, absoluteStart);
+            // Interface/emit special-casing must run for EVERY consumer
+            // (widgets and previews alike) - it only needs the line prefix
+            // and the interface index, never functionInfo. Only link
+            // resolution below is functionInfo-dependent.
+            const absoluteStart = baseOffset + token.start;
+            const isDeclaration = tokenKey ? isFunctionDeclaration(fullLine, absoluteStart) : false;
+            const isEmit = tokenKey ? isEmitCall(fullLine, absoluteStart) : false;
+            const isInterfaceName = interfaceIndex.has(token.text);
+            if (isEmit) {
+              const escapedName = escapeHtml(token.text);
+              result += `<span class="${token.className} variable-token" data-var="${escapedName}" data-event="${escapedName}">${escapedName}</span>`;
+            } else if (isInterfaceName) {
+              const escapedName = escapeHtml(token.text);
+              result += `<span class="token-constant variable-token" data-var="${escapedName}">${escapedName}</span>`;
+            } else if (functionInfo && tokenKey && interactiveOpts) {
               const arity = getCallArityFromLines(lines, lineIndex, absoluteStart + token.text.length);
-              const isInterfaceName = interfaceIndex.has(token.text);
-              if (isEmit) {
-                const escapedName = escapeHtml(token.text);
-                result += `<span class="${token.className} variable-token" data-var="${escapedName}" data-event="${escapedName}">${escapedName}</span>`;
-              } else if (isInterfaceName) {
-                const escapedName = escapeHtml(token.text);
-                result += `<span class="token-constant variable-token" data-var="${escapedName}">${escapedName}</span>`;
-              } else {
-                const callPrefix = line.slice(0, token.start);
-                const isSuperCall = /(?:^|[^a-zA-Z0-9_])super\s*\.\s*$/.test(callPrefix);
-                const isThisCall = /(?:^|[^a-zA-Z0-9_])this\s*\.\s*$/.test(callPrefix);
-                const isMemberAccess = /\.\s*$/.test(callPrefix);
-                const qualifiedMatch = callPrefix.match(/(?:^|[^a-zA-Z0-9_])([_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*)\s*\.\s*$/);
-                const callContract = qualifiedMatch && qualifiedMatch[1] && qualifiedMatch[1] !== 'super'
-                  ? qualifiedMatch[1]
-                  : '';
-                const isKnownContract = Boolean(callContract) && knownContractsLower.has(callContract.toLowerCase());
+              const callPrefix = line.slice(0, token.start);
+              const isSuperCall = /(?:^|[^a-zA-Z0-9_])super\s*\.\s*$/.test(callPrefix);
+              const isThisCall = /(?:^|[^a-zA-Z0-9_])this\s*\.\s*$/.test(callPrefix);
+              const isMemberAccess = /\.\s*$/.test(callPrefix);
+              const qualifiedMatch = callPrefix.match(/(?:^|[^a-zA-Z0-9_])([_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*)\s*\.\s*$/);
+              const callContract = qualifiedMatch && qualifiedMatch[1] && qualifiedMatch[1] !== 'super'
+                ? qualifiedMatch[1]
+                : '';
+              const isKnownContract = Boolean(callContract) && knownContractsLower.has(callContract.toLowerCase());
 
-                // Member calls like `reserve.cache()` are often Solidity `using Lib for Type` extension calls.
-                // Those have an "implicit" first argument (the receiver), so their definition arity is `callArity + 1`.
-                const allowDirectLink = !isDeclaration && (!isMemberAccess || isSuperCall || isThisCall || isKnownContract);
-                let resolvedKey = resolveFunctionLinkKey(token.text, arity, allowDirectLink);
-                if (!resolvedKey && !isDeclaration && isMemberAccess && arity !== null) {
-                  resolvedKey = resolveFunctionLinkKey(token.text, arity + 1, true);
-                }
-                if (resolvedKey) {
-                  const callMeta = isSuperCall
-                    ? ' data-fn-call="super"'
-                    : (callContract ? ` data-fn-call-contract="${escapeHtml(callContract)}"` : '');
-                  result += `<button type="button" class="${token.className} function-link" data-fn-key="${resolvedKey}" data-fn-name="${escapeHtml(token.text)}"${originAttr}${callMeta}>${escapeHtml(token.text)}</button>`;
-                } else {
-                  result += `<span class="${token.className}">${escapeHtml(token.text)}</span>`;
-                }
+              // Member calls like `reserve.cache()` are often Solidity `using Lib for Type` extension calls.
+              // Those have an "implicit" first argument (the receiver), so their definition arity is `callArity + 1`.
+              const allowDirectLink = !isDeclaration && (!isMemberAccess || isSuperCall || isThisCall || isKnownContract);
+              let resolvedKey = resolveFunctionLinkKey(token.text, arity, allowDirectLink);
+              if (!resolvedKey && !isDeclaration && isMemberAccess && arity !== null) {
+                resolvedKey = resolveFunctionLinkKey(token.text, arity + 1, true);
+              }
+              if (resolvedKey) {
+                const callMeta = isSuperCall
+                  ? ' data-fn-call="super"'
+                  : (callContract ? ` data-fn-call-contract="${escapeHtml(callContract)}"` : '');
+                result += `<button type="button" class="${token.className} function-link" data-fn-key="${resolvedKey}" data-fn-name="${escapeHtml(token.text)}"${originAttr}${callMeta}>${escapeHtml(token.text)}</button>`;
+              } else {
+                result += `<span class="${token.className}">${escapeHtml(token.text)}</span>`;
               }
             } else {
               result += `<span class="${token.className}">${escapeHtml(token.text)}</span>`;
@@ -3236,7 +3295,7 @@
             const inSignatureTail = signatureIndex && isInRanges(globalStart, signatureIndex.signatureTailRanges);
             if (inSignatureTail) {
               const resolvedKey = resolveFunctionLinkKey(token.text, 0, true);
-              if (resolvedKey) {
+              if (resolvedKey && interactiveOpts) {
                 result += `<button type="button" class="${token.className} function-link" data-fn-key="${resolvedKey}" data-fn-name="${escapeHtml(token.text)}"${originAttr}>${escapeHtml(token.text)}</button>`;
               } else {
                 result += `<span class="${token.className}">${escapeHtml(token.text)}</span>`;
@@ -3272,50 +3331,6 @@
         return result;
       };
 
-      const findBlockStart = (line, fromIndex = 0) => {
-        let inSingle = false;
-        let inDouble = false;
-        let inTemplate = false;
-        let escape = false;
-        for (let i = fromIndex; i < line.length - 1; i += 1) {
-          const ch = line[i];
-          if (escape) {
-            escape = false;
-            continue;
-          }
-          if (inSingle) {
-            if (ch === "\\") escape = true;
-            else if (ch === "'") inSingle = false;
-            continue;
-          }
-          if (inDouble) {
-            if (ch === "\\") escape = true;
-            else if (ch === '"') inDouble = false;
-            continue;
-          }
-          if (inTemplate) {
-            if (ch === "\\") escape = true;
-            else if (ch === "`") inTemplate = false;
-            continue;
-          }
-          if (ch === "'") {
-            inSingle = true;
-            continue;
-          }
-          if (ch === '"') {
-            inDouble = true;
-            continue;
-          }
-          if (ch === "`") {
-            inTemplate = true;
-            continue;
-          }
-          if (ch === "/" && line[i + 1] === "/") return -1;
-          if (ch === "/" && line[i + 1] === "*") return i;
-        }
-        return -1;
-      };
-
       const highlightLineWithState = (line, inBlockComment, lineIndex) => {
         let result = "";
         let index = 0;
@@ -3334,7 +3349,7 @@
             continue;
           }
 
-          const startIdx = findBlockStart(line, index);
+          const startIdx = findBlockCommentStart(line, index);
           if (startIdx === -1) {
             result += highlightLine(line.slice(index), lineIndex, index, line);
             return { html: result, inBlockComment: false };
@@ -3372,7 +3387,7 @@
         return lines.map(strip);
       };
 
-      const codeKey = `${originNodeId || 'node'}:${hashString(code || '')}`;
+      const codeKey = `${originNodeId || 'node'}:${hashString(code || '')}:${highlightOnly ? (interactiveOpts ? 'hi' : 'hp') : 'full'}`;
       const cached = codeBlockCache.get(codeKey);
       const lines = cached?.lines || normalizeIndent(code);
       let highlightedLines = cached?.highlightedLines || null;
@@ -3391,6 +3406,9 @@
           return highlighted.html;
         });
         codeBlockCache.set(codeKey, { lines, highlightedLines });
+      }
+      if (highlightOnly) {
+        return { lines, highlightedLines };
       }
       const rowsHtml = lines.map((line, i) => {
         const lineKey = `${originNodeId || 'node'}:${i + 1}`;
@@ -3438,21 +3456,6 @@
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#039;");
 
-    const TOOLTIP_TOKEN_PATTERNS = [
-      { className: 'token-comment', regex: /\/\/.*/g },
-      { className: 'token-comment', regex: /\/\*[\s\S]*?\*\//g },
-      { className: 'token-string', regex: /`(?:\\[\s\S]|[^\\`])*`|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/g },
-      { className: 'token-regex', regex: /\/(?:\[[^\]\r\n]+]|\\.|[^/\\\[\r\n])+\/[gimyu]{0,5}(?=\s*(?:$|[,\r\n.;})\]]))/g },
-      { className: 'token-keyword', regex: /\b(?:var|import|function|constant|view|pure|payable|storage|memory|if|else|for|while|do|break|continue|returns?|private|public|internal|external|inherited|this|suicide|selfdestruct|emit|new|is|delete|throw|revert|assert|require|contract|interface|library|using|struct|modifier|return)\b/g },
-      { className: 'token-function', regex: /[_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*(?=\s*=\s*(?:function\b|(?:\([^()]*\)|[_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*)\s*=>))/g },
-      { className: 'token-type', regex: /\b(?:address|string|bytes\d*|int\d*|uint\d*|bool|u?fixed\d+x\d+|mapping)\b/g },
-      { className: 'token-constant', regex: /\b[A-Z][A-Z\d_]*\b/g },
-      { className: 'token-number', regex: /\b(?:0[xX][\dA-Fa-f]+|0[bB][01]+|0[oO][0-7]+|NaN|Infinity)\b|(?:\b\d+\.?\d*|\B\.\d+)(?:[Ee][+-]?\d+)?/g },
-      { className: 'token-function', regex: /[_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*(?=\s*\()/g },
-      { className: 'token-operator', regex: /-[-=]?|\+[+=]?|!=?=?|<<?=?|>>?>?=?|=(?:==?|>)?|&[&=]?|\|[|=]?|\*\*?=?|\/=?|~|\^=?|%=?|\?|\.{3}/g },
-      { className: 'token-modifier', regex: /\b(?:onlyOwner|onlyRole|nonReentrant|override|payable|view|pure|virtual)\b/g }
-    ];
-
     const normalizeSnippetIndent = (source = '') => {
       const lines = source.replace(/\t/g, '  ').split('\n');
       let minIndent = null;
@@ -3466,57 +3469,89 @@
       return lines.map((line) => line.slice(minIndent));
     };
 
-    const highlightSnippetLine = (line) => {
-      if (!line) return '';
-      const tokens = [];
-      TOOLTIP_TOKEN_PATTERNS.forEach(({ className, regex }, priority) => {
-        regex.lastIndex = 0;
-        let match;
-        while ((match = regex.exec(line)) !== null) {
-          tokens.push({
-            start: match.index,
-            end: match.index + match[0].length,
-            className,
-            text: match[0],
-            priority
-          });
+    // True when, after scanning `text`, the lexer is back at top-level code
+    // (not inside a block comment or string/template literal). Used to keep
+    // truncated previews lexically self-contained so they highlight exactly
+    // like real code.
+    const snippetEndsClean = (text) => {
+      let inBlock = false, inSingle = false, inDouble = false, inTemplate = false, inLine = false, escape = false;
+      for (let i = 0; i < text.length; i += 1) {
+        const ch = text[i];
+        const next = text[i + 1] || '';
+        if (escape) { escape = false; continue; }
+        if (inBlock) {
+          if (ch === '*' && next === '/') { inBlock = false; i += 1; }
+          continue;
         }
-      });
-      tokens.sort((a, b) => (a.start === b.start ? a.priority - b.priority : a.start - b.start));
-      const merged = [];
-      let occupied = 0;
-      tokens.forEach((token) => {
-        if (token.start < occupied) return;
-        merged.push(token);
-        occupied = token.end;
-      });
-      let cursor = 0;
-      let result = '';
-      merged.forEach((token) => {
-        result += escapeHtmlGlobal(line.slice(cursor, token.start));
-        result += `<span class="${token.className}">${escapeHtmlGlobal(token.text)}</span>`;
-        cursor = token.end;
-      });
-      result += escapeHtmlGlobal(line.slice(cursor));
-      return result;
+        if (inLine) {
+          if (ch === '\n') inLine = false;
+          continue;
+        }
+        if (inSingle) {
+          if (ch === '\\') escape = true;
+          else if (ch === "'") inSingle = false;
+          continue;
+        }
+        if (inDouble) {
+          if (ch === '\\') escape = true;
+          else if (ch === '"') inDouble = false;
+          continue;
+        }
+        if (inTemplate) {
+          if (ch === '\\') escape = true;
+          else if (ch === '`') inTemplate = false;
+          continue;
+        }
+        if (ch === '/' && next === '/') { inLine = true; i += 1; continue; }
+        if (ch === '/' && next === '*') { inBlock = true; i += 1; continue; }
+      }
+      return !inBlock && !inSingle && !inDouble && !inTemplate;
     };
 
     const renderTooltipSnippet = (source = '', maxLines = 6, maxChars = 420) => {
       if (!source) return '';
-      let trimmed = source.trim();
-      if (!trimmed) return '';
-      if (trimmed.length > maxChars) trimmed = `${trimmed.slice(0, maxChars)}…`;
-      let lines = normalizeSnippetIndent(trimmed);
-      if (lines.length > maxLines) {
-        lines = lines.slice(0, maxLines);
-        lines.push('…');
+      let lines = normalizeSnippetIndent(source.trim());
+      if (!lines.length || (lines.length === 1 && !lines[0].trim())) return '';
+
+      // Char budget: never cut mid-line. A partial line can split a block
+      // comment or string opener and desynchronize the stateful highlighter,
+      // making the preview render differently than real code.
+      let used = 0;
+      let dropped = false;
+      const kept = [];
+      for (let i = 0; i < lines.length; i += 1) {
+        const cost = lines[i].length + 1;
+        if (kept.length && used + cost > maxChars) { dropped = true; break; }
+        kept.push(lines[i]);
+        used += cost;
       }
-      return lines.map((line) => {
-        if (line === '…') {
-          return `<span class="var-tooltip-line text-slate-500">…</span>`;
-        }
-        return `<span class="var-tooltip-line">${highlightSnippetLine(line)}</span>`;
-      }).join('\n');
+
+      // Line budget.
+      let selected = kept;
+      if (selected.length > maxLines) {
+        selected = selected.slice(0, maxLines);
+        dropped = true;
+      }
+
+      // Drop trailing lines that would END inside an open block comment or
+      // string literal (their closer was truncated away), so the preview is
+      // lexically self-contained and highlights exactly like real code.
+      while (selected.length > 1 && !snippetEndsClean(selected.join('\n'))) {
+        selected.pop();
+        dropped = true;
+      }
+
+      const { highlightedLines } = renderCodeBlock(
+        selected.join('\n'), ambientFunctionInfo, null, [], '',
+        { mode: 'highlight', interactive: false }
+      );
+      const out = highlightedLines.map(
+        (html) => `<span class="var-tooltip-line">${html}</span>`
+      );
+      if (dropped) {
+        out.push('<span class="var-tooltip-line text-slate-500">…</span>');
+      }
+      return out.join('\n');
     };
 
     const extractStructFields = (source = '') => {
@@ -3657,10 +3692,12 @@
     const escapeAndHighlight = (text = '') => {
       const src = (text || '').toString();
       if (!src) return '';
-      const lines = src.split('\n');
-      const highlighted = lines.map((line) => highlightSnippetLine(line)).join('\n');
+      const { highlightedLines } = renderCodeBlock(
+        src, null, null, [], '',
+        { mode: 'highlight', interactive: false }
+      );
       // Preserve newlines in inline contexts (e.g. inside explanatory text).
-      return `<span class="whitespace-pre-wrap font-bold">${highlighted}</span>`;
+      return `<span class="whitespace-pre-wrap font-bold">${highlightedLines.join('\n')}</span>`;
     };
 
 	    const senderKindMeta = (kindRaw = '') => {
@@ -4709,6 +4746,9 @@
     let libraryIndex = new Map();
     let eventIndex = new Map();
     let interfaceIndex = new Map();
+    // Last functionInfo built by a rendered flow; previews reuse it so
+    // signature-tail resolution matches the code widgets on screen.
+    let ambientFunctionInfo = null;
 
     const rebuildContractIndexes = () => {
       const varIndex = new Map();
@@ -6456,6 +6496,10 @@
           .map((name) => name.toLowerCase())
       );
 	      const functionInfo = { nameArityMap, uniqueNames, knownContractsLower };
+	      // Ambient context for previews: tooltips hover over lines rendered
+	      // from THIS flow, so they must resolve signature-tail names exactly
+	      // like these code widgets do.
+	      ambientFunctionInfo = functionInfo;
 	      const animateNodes = !isEntrySwitch && !appState.stepByStepEnabled;
 	      const flowPieces = [];
 	      let renderIndex = 0;

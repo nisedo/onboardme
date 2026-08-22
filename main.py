@@ -496,9 +496,16 @@ def _collect_render_metadata(
     }
 
 
-def _select_local_root_contracts(slither: Slither) -> List[Contract]:
-    """Return deployable root contracts in a local project."""
-    audited_contracts = list(_iter_audited_contracts(slither, None))
+def _select_local_root_contracts(
+    slither: Slither, use_all_contracts: bool = False
+) -> List[Contract]:
+    """Return deployable root contracts in a local project.
+
+    When `use_all_contracts` is set (deployed target could not be resolved and a
+    derived sibling may hide the deployed base), consider every contract instead
+    of only the most-derived set.
+    """
+    audited_contracts = list(_iter_audited_contracts(slither, None, use_all_contracts))
     if not audited_contracts:
         return []
     audited_set = set(audited_contracts)
@@ -523,7 +530,7 @@ def _merge_root_contracts(
     drop the contract actually deployed at the requested address.
     """
     merged: List[Contract] = []
-    seen: set[tuple[str, str]] = set()
+    seen: set[tuple] = set()
 
     for contract in list(preferred_contracts or []) + list(discovered_contracts or []):
         if contract is None:
@@ -593,10 +600,21 @@ def generate_html(
 
     _report_progress(progress_cb, "Resolving deployed contract")
     resolved_contracts = _resolve_root_contracts(slither, address, chain)
-    root_contracts = _merge_root_contracts(
-        resolved_contracts,
-        _select_local_root_contracts(slither),
-    )
+    if not resolved_contracts:
+        # The deployed contract could not be identified from metadata. Prefer
+        # every contract over only the most-derived set: a derived sibling in
+        # the bundle (e.g. PoolV3_USDT is PoolV3) would otherwise hide the
+        # actually deployed base.
+        _report_progress(progress_cb, "Deployed contract not identified; considering all contracts")
+        root_contracts = _merge_root_contracts(
+            resolved_contracts,
+            _select_local_root_contracts(slither, use_all_contracts=True),
+        )
+    else:
+        root_contracts = _merge_root_contracts(
+            resolved_contracts,
+            _select_local_root_contracts(slither),
+        )
     if not root_contracts:
         raise ValueError("No deployable contracts found for the address")
 

@@ -368,6 +368,42 @@ Response:
 }
 ```
 
+## 🧪 Running the tests (dev work on OnboardMe)
+
+The backend test suite lives in [`tests/`](tests/) and verifies entry-point
+discovery and execution-flow resolution against immutable deployed contracts
+registered in [`tests/targets.py`](tests/targets.py) (currently
+`0x683FAf5BAFd88d4c383cCaf3d61C26AF2E164409`, mainnet `PoolV3`).
+
+```bash
+# One-time: install the dev dependency
+pip install -r requirements-dev.txt
+
+# Run the full suite (from the repository root)
+python -m pytest tests/ -v
+```
+
+The first run fetches the verified source from Etherscan (requires
+`ETHERSCAN_API_KEY` in your `.env`) and caches it under
+`crytic-export/etherscan-contracts/`. The on-chain contracts are immutable,
+so that cache never goes stale: later runs are fully offline and fast. Tests
+are only run manually by a dev when they want to - there is no CI.
+
+Adding another deployed contract to the suite is a one-line entry in
+`tests/targets.py`; see [`tests/README.md`](tests/README.md) for the full
+recipe (including generating and reviewing the golden snapshot).
+
+If you intentionally change how flows are resolved and the new behavior is
+the correct interpretation of the immutable contract, regenerate the golden
+snapshots with:
+
+```bash
+python -m pytest tests/ --snapshot-update
+```
+
+Always review the snapshot diff before updating it - see
+[`tests/README.md`](tests/README.md) for details.
+
 ## Contributing
 
 Issues and PRs are welcome. If you hit a failure, please include:

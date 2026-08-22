@@ -1,0 +1,5889 @@
+{
+ "entries": {
+  "ERC20.approve(address,uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "Context",
+     "kind": "functioncontract",
+     "name": "Context._msgSender()",
+     "selector": "0x119df25f"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._approve(address,address,uint256)",
+     "selector": "0x104e81ff"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.approve(address,uint256)",
+     "selector": "0x095ea7b3"
+    }
+   ],
+   "inputs": [
+    [
+     "spender",
+     "address"
+    ],
+    [
+     "amount",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "bool"
+    ]
+   ],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [],
+   "state_variables_written_keys": [
+    "ERC20._allowances"
+   ]
+  },
+  "ERC20.decreaseAllowance(address,uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "Context",
+     "kind": "functioncontract",
+     "name": "Context._msgSender()",
+     "selector": "0x119df25f"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._approve(address,address,uint256)",
+     "selector": "0x104e81ff"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.allowance(address,address)",
+     "selector": "0xdd62ed3e"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.decreaseAllowance(address,uint256)",
+     "selector": "0xa457c2d7"
+    }
+   ],
+   "inputs": [
+    [
+     "spender",
+     "address"
+    ],
+    [
+     "subtractedValue",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "bool"
+    ]
+   ],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ERC20._allowances"
+   ],
+   "state_variables_written_keys": [
+    "ERC20._allowances"
+   ]
+  },
+  "ERC20.increaseAllowance(address,uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "Context",
+     "kind": "functioncontract",
+     "name": "Context._msgSender()",
+     "selector": "0x119df25f"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._approve(address,address,uint256)",
+     "selector": "0x104e81ff"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.allowance(address,address)",
+     "selector": "0xdd62ed3e"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.increaseAllowance(address,uint256)",
+     "selector": "0x39509351"
+    }
+   ],
+   "inputs": [
+    [
+     "spender",
+     "address"
+    ],
+    [
+     "addedValue",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "bool"
+    ]
+   ],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ERC20._allowances"
+   ],
+   "state_variables_written_keys": [
+    "ERC20._allowances"
+   ]
+  },
+  "ERC20.transfer(address,uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "Context",
+     "kind": "functioncontract",
+     "name": "Context._msgSender()",
+     "selector": "0x119df25f"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._afterTokenTransfer(address,address,uint256)",
+     "selector": "0x8f811a1c"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._beforeTokenTransfer(address,address,uint256)",
+     "selector": "0xcad3be83"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._transfer(address,address,uint256)",
+     "selector": "0x30e0789e"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.transfer(address,uint256)",
+     "selector": "0xa9059cbb"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable._requireNotPaused()",
+     "selector": "0xabb87a6f"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable.paused()",
+     "selector": "0x5c975abb"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "modifier",
+     "name": "Pausable.whenNotPaused()",
+     "selector": "0x5c2dc4f0"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._transfer(address,address,uint256)",
+     "selector": "0x30e0789e"
+    }
+   ],
+   "inputs": [
+    [
+     "to",
+     "address"
+    ],
+    [
+     "amount",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "bool"
+    ]
+   ],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ERC20._balances",
+    "Pausable._paused"
+   ],
+   "state_variables_written_keys": [
+    "ERC20._balances"
+   ]
+  },
+  "ERC20.transferFrom(address,address,uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "Context",
+     "kind": "functioncontract",
+     "name": "Context._msgSender()",
+     "selector": "0x119df25f"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._afterTokenTransfer(address,address,uint256)",
+     "selector": "0x8f811a1c"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._approve(address,address,uint256)",
+     "selector": "0x104e81ff"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._beforeTokenTransfer(address,address,uint256)",
+     "selector": "0xcad3be83"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._spendAllowance(address,address,uint256)",
+     "selector": "0x1532335e"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._transfer(address,address,uint256)",
+     "selector": "0x30e0789e"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.allowance(address,address)",
+     "selector": "0xdd62ed3e"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.transferFrom(address,address,uint256)",
+     "selector": "0x23b872dd"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable._requireNotPaused()",
+     "selector": "0xabb87a6f"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable.paused()",
+     "selector": "0x5c975abb"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "modifier",
+     "name": "Pausable.whenNotPaused()",
+     "selector": "0x5c2dc4f0"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._transfer(address,address,uint256)",
+     "selector": "0x30e0789e"
+    }
+   ],
+   "inputs": [
+    [
+     "from",
+     "address"
+    ],
+    [
+     "to",
+     "address"
+    ],
+    [
+     "amount",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "bool"
+    ]
+   ],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ERC20._allowances",
+    "ERC20._balances",
+    "Pausable._paused"
+   ],
+   "state_variables_written_keys": [
+    "ERC20._allowances",
+    "ERC20._balances"
+   ]
+  },
+  "ERC20Permit.permit(address,address,uint256,uint256,uint8,bytes32,bytes32)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "Counters",
+     "kind": "functioncontract",
+     "name": "Counters.current(Counters.Counter)",
+     "selector": "0xe25b0bbc"
+    },
+    {
+     "contract": "Counters",
+     "kind": "functioncontract",
+     "name": "Counters.increment(Counters.Counter)",
+     "selector": "0xa4192c5e"
+    },
+    {
+     "contract": "ECDSA",
+     "kind": "functioncontract",
+     "name": "ECDSA._throwError(ECDSA.RecoverError)",
+     "selector": "0x0eb15ed5"
+    },
+    {
+     "contract": "ECDSA",
+     "kind": "functioncontract",
+     "name": "ECDSA.recover(bytes32,uint8,bytes32,bytes32)",
+     "selector": "0xc2bf17b0"
+    },
+    {
+     "contract": "ECDSA",
+     "kind": "functioncontract",
+     "name": "ECDSA.toTypedDataHash(bytes32,bytes32)",
+     "selector": "0x7df7a71c"
+    },
+    {
+     "contract": "ECDSA",
+     "kind": "functioncontract",
+     "name": "ECDSA.tryRecover(bytes32,uint8,bytes32,bytes32)",
+     "selector": "0x4d78da76"
+    },
+    {
+     "contract": "EIP712",
+     "kind": "functioncontract",
+     "name": "EIP712._buildDomainSeparator()",
+     "selector": "0x95ae0604"
+    },
+    {
+     "contract": "EIP712",
+     "kind": "functioncontract",
+     "name": "EIP712._domainSeparatorV4()",
+     "selector": "0x7b134b4c"
+    },
+    {
+     "contract": "EIP712",
+     "kind": "functioncontract",
+     "name": "EIP712._hashTypedDataV4(bytes32)",
+     "selector": "0xc8f1ecd8"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._approve(address,address,uint256)",
+     "selector": "0x104e81ff"
+    },
+    {
+     "contract": "ERC20Permit",
+     "kind": "functioncontract",
+     "name": "ERC20Permit._useNonce(address)",
+     "selector": "0x35d11de3"
+    },
+    {
+     "contract": "ERC20Permit",
+     "kind": "functioncontract",
+     "name": "ERC20Permit.permit(address,address,uint256,uint256,uint8,bytes32,bytes32)",
+     "selector": "0xd505accf"
+    }
+   ],
+   "inputs": [
+    [
+     "owner",
+     "address"
+    ],
+    [
+     "spender",
+     "address"
+    ],
+    [
+     "value",
+     "uint256"
+    ],
+    [
+     "deadline",
+     "uint256"
+    ],
+    [
+     "v",
+     "uint8"
+    ],
+    [
+     "r",
+     "bytes32"
+    ],
+    [
+     "s",
+     "bytes32"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "EIP712._TYPE_HASH",
+    "EIP712._cachedChainId",
+    "EIP712._cachedDomainSeparator",
+    "EIP712._cachedThis",
+    "EIP712._hashedName",
+    "EIP712._hashedVersion",
+    "ERC20Permit._PERMIT_TYPEHASH",
+    "ERC20Permit._nonces"
+   ],
+   "state_variables_written_keys": [
+    "ERC20._allowances"
+   ]
+  },
+  "PoolV3.deposit(uint256,address)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address._revert(bytes,string)",
+     "selector": "0x6cadf5e1"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.functionCall(address,bytes,string)",
+     "selector": "0x241b5886"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.functionCallWithValue(address,bytes,uint256,string)",
+     "selector": "0xd525ab8a"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.isContract(address)",
+     "selector": "0x16279055"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.verifyCallResultFromTarget(address,bool,bytes,string)",
+     "selector": "0x1daa78c1"
+    },
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._afterTokenTransfer(address,address,uint256)",
+     "selector": "0x8f811a1c"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._beforeTokenTransfer(address,address,uint256)",
+     "selector": "0xcad3be83"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._mint(address,uint256)",
+     "selector": "0x4e6ec247"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.totalSupply()",
+     "selector": "0x18160ddd"
+    },
+    {
+     "contract": "ERC4626",
+     "kind": "functioncontract",
+     "name": "ERC4626.asset()",
+     "selector": "0x38d52e0f"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256)",
+     "selector": "0xaa9a0912"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256,Math.Rounding)",
+     "selector": "0x1a134248"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable._requireNotPaused()",
+     "selector": "0xabb87a6f"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable.paused()",
+     "selector": "0x5c975abb"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "modifier",
+     "name": "Pausable.whenNotPaused()",
+     "selector": "0x5c2dc4f0"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._amountMinusFee(uint256)",
+     "selector": "0xbcc86729"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestIndex(uint256)",
+     "selector": "0x6d30b02f"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToShares(uint256,Math.Rounding)",
+     "selector": "0x608baa9a"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._deposit(address,uint256,uint256,uint256)",
+     "selector": "0xfc0c0501"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._updateBaseInterest(int256,int256,bool)",
+     "selector": "0x396a3e69"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.availableLiquidity()",
+     "selector": "0x74375359"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.deposit(uint256,address)",
+     "selector": "0x6e553f65"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalAssets()",
+     "selector": "0x01e1d114"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "functioncontract",
+     "name": "ReentrancyGuardTrait._ensureNotEntered()",
+     "selector": "0x630c6c83"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "modifier",
+     "name": "ReentrancyGuardTrait.nonReentrant()",
+     "selector": "0x129ea136"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toInt256(uint256)",
+     "selector": "0xdfbe873b"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint128(uint256)",
+     "selector": "0x809fdd33"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint256(int256)",
+     "selector": "0xfdcf791b"
+    },
+    {
+     "contract": "SafeERC20",
+     "kind": "functioncontract",
+     "name": "SafeERC20._callOptionalReturn(IERC20,bytes)",
+     "selector": "0xf8b2cf29"
+    },
+    {
+     "contract": "SafeERC20",
+     "kind": "functioncontract",
+     "name": "SafeERC20.safeTransferFrom(IERC20,address,address,uint256)",
+     "selector": "0xd9fc4b61"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "functioncontract",
+     "name": "SanityCheckTrait._revertIfZeroAddress(address)",
+     "selector": "0xebeb1b8c"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "modifier",
+     "name": "SanityCheckTrait.nonZeroAddress(address)",
+     "selector": "0x7095dee8"
+    }
+   ],
+   "inputs": [
+    [
+     "assets",
+     "uint256"
+    ],
+    [
+     "receiver",
+     "address"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "shares",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ERC20._balances",
+    "ERC20._totalSupply",
+    "ERC4626._asset",
+    "Pausable._paused",
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.interestRateModel",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ],
+   "state_variables_written_keys": [
+    "ERC20._balances",
+    "ERC20._totalSupply",
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ]
+  },
+  "PoolV3.depositWithReferral(uint256,address,uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address._revert(bytes,string)",
+     "selector": "0x6cadf5e1"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.functionCall(address,bytes,string)",
+     "selector": "0x241b5886"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.functionCallWithValue(address,bytes,uint256,string)",
+     "selector": "0xd525ab8a"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.isContract(address)",
+     "selector": "0x16279055"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.verifyCallResultFromTarget(address,bool,bytes,string)",
+     "selector": "0x1daa78c1"
+    },
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._afterTokenTransfer(address,address,uint256)",
+     "selector": "0x8f811a1c"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._beforeTokenTransfer(address,address,uint256)",
+     "selector": "0xcad3be83"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._mint(address,uint256)",
+     "selector": "0x4e6ec247"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.totalSupply()",
+     "selector": "0x18160ddd"
+    },
+    {
+     "contract": "ERC4626",
+     "kind": "functioncontract",
+     "name": "ERC4626.asset()",
+     "selector": "0x38d52e0f"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256)",
+     "selector": "0xaa9a0912"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256,Math.Rounding)",
+     "selector": "0x1a134248"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable._requireNotPaused()",
+     "selector": "0xabb87a6f"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable.paused()",
+     "selector": "0x5c975abb"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "modifier",
+     "name": "Pausable.whenNotPaused()",
+     "selector": "0x5c2dc4f0"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._amountMinusFee(uint256)",
+     "selector": "0xbcc86729"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestIndex(uint256)",
+     "selector": "0x6d30b02f"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToShares(uint256,Math.Rounding)",
+     "selector": "0x608baa9a"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._deposit(address,uint256,uint256,uint256)",
+     "selector": "0xfc0c0501"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._updateBaseInterest(int256,int256,bool)",
+     "selector": "0x396a3e69"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.availableLiquidity()",
+     "selector": "0x74375359"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.deposit(uint256,address)",
+     "selector": "0x6e553f65"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.depositWithReferral(uint256,address,uint256)",
+     "selector": "0xb3d45433"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalAssets()",
+     "selector": "0x01e1d114"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "functioncontract",
+     "name": "ReentrancyGuardTrait._ensureNotEntered()",
+     "selector": "0x630c6c83"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "modifier",
+     "name": "ReentrancyGuardTrait.nonReentrant()",
+     "selector": "0x129ea136"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toInt256(uint256)",
+     "selector": "0xdfbe873b"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint128(uint256)",
+     "selector": "0x809fdd33"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint256(int256)",
+     "selector": "0xfdcf791b"
+    },
+    {
+     "contract": "SafeERC20",
+     "kind": "functioncontract",
+     "name": "SafeERC20._callOptionalReturn(IERC20,bytes)",
+     "selector": "0xf8b2cf29"
+    },
+    {
+     "contract": "SafeERC20",
+     "kind": "functioncontract",
+     "name": "SafeERC20.safeTransferFrom(IERC20,address,address,uint256)",
+     "selector": "0xd9fc4b61"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "functioncontract",
+     "name": "SanityCheckTrait._revertIfZeroAddress(address)",
+     "selector": "0xebeb1b8c"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "modifier",
+     "name": "SanityCheckTrait.nonZeroAddress(address)",
+     "selector": "0x7095dee8"
+    }
+   ],
+   "inputs": [
+    [
+     "assets",
+     "uint256"
+    ],
+    [
+     "receiver",
+     "address"
+    ],
+    [
+     "referralCode",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "shares",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ERC20._balances",
+    "ERC20._totalSupply",
+    "ERC4626._asset",
+    "Pausable._paused",
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.interestRateModel",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ],
+   "state_variables_written_keys": [
+    "ERC20._balances",
+    "ERC20._totalSupply",
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ]
+  },
+  "PoolV3.lendCreditAccount(uint256,address)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address._revert(bytes,string)",
+     "selector": "0x6cadf5e1"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.functionCall(address,bytes,string)",
+     "selector": "0x241b5886"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.functionCallWithValue(address,bytes,uint256,string)",
+     "selector": "0xd525ab8a"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.isContract(address)",
+     "selector": "0x16279055"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.verifyCallResultFromTarget(address,bool,bytes,string)",
+     "selector": "0x1daa78c1"
+    },
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "ERC4626",
+     "kind": "functioncontract",
+     "name": "ERC4626.asset()",
+     "selector": "0x38d52e0f"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestIndex(uint256)",
+     "selector": "0x6d30b02f"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._updateBaseInterest(int256,int256,bool)",
+     "selector": "0x396a3e69"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.availableLiquidity()",
+     "selector": "0x74375359"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.lendCreditAccount(uint256,address)",
+     "selector": "0xbf28068b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "functioncontract",
+     "name": "ReentrancyGuardTrait._ensureNotEntered()",
+     "selector": "0x630c6c83"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "modifier",
+     "name": "ReentrancyGuardTrait.nonReentrant()",
+     "selector": "0x129ea136"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toInt256(uint256)",
+     "selector": "0xdfbe873b"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint128(uint256)",
+     "selector": "0x809fdd33"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint256(int256)",
+     "selector": "0xfdcf791b"
+    },
+    {
+     "contract": "SafeERC20",
+     "kind": "functioncontract",
+     "name": "SafeERC20._callOptionalReturn(IERC20,bytes)",
+     "selector": "0xf8b2cf29"
+    },
+    {
+     "contract": "SafeERC20",
+     "kind": "functioncontract",
+     "name": "SafeERC20.safeTransfer(IERC20,address,uint256)",
+     "selector": "0xd1660f99"
+    }
+   ],
+   "inputs": [
+    [
+     "borrowedAmount",
+     "uint256"
+    ],
+    [
+     "creditAccount",
+     "address"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ERC4626._asset",
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._creditManagerDebt",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.interestRateModel",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ],
+   "state_variables_written_keys": [
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._totalDebt",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ]
+  },
+  "PoolV3.mint(uint256,address)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address._revert(bytes,string)",
+     "selector": "0x6cadf5e1"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.functionCall(address,bytes,string)",
+     "selector": "0x241b5886"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.functionCallWithValue(address,bytes,uint256,string)",
+     "selector": "0xd525ab8a"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.isContract(address)",
+     "selector": "0x16279055"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.verifyCallResultFromTarget(address,bool,bytes,string)",
+     "selector": "0x1daa78c1"
+    },
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._afterTokenTransfer(address,address,uint256)",
+     "selector": "0x8f811a1c"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._beforeTokenTransfer(address,address,uint256)",
+     "selector": "0xcad3be83"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._mint(address,uint256)",
+     "selector": "0x4e6ec247"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.totalSupply()",
+     "selector": "0x18160ddd"
+    },
+    {
+     "contract": "ERC4626",
+     "kind": "functioncontract",
+     "name": "ERC4626.asset()",
+     "selector": "0x38d52e0f"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256)",
+     "selector": "0xaa9a0912"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256,Math.Rounding)",
+     "selector": "0x1a134248"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable._requireNotPaused()",
+     "selector": "0xabb87a6f"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable.paused()",
+     "selector": "0x5c975abb"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "modifier",
+     "name": "Pausable.whenNotPaused()",
+     "selector": "0x5c2dc4f0"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._amountWithFee(uint256)",
+     "selector": "0x0b8d7dcd"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestIndex(uint256)",
+     "selector": "0x6d30b02f"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToAssets(uint256,Math.Rounding)",
+     "selector": "0x6fa5b1cd"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._deposit(address,uint256,uint256,uint256)",
+     "selector": "0xfc0c0501"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._updateBaseInterest(int256,int256,bool)",
+     "selector": "0x396a3e69"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.availableLiquidity()",
+     "selector": "0x74375359"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.mint(uint256,address)",
+     "selector": "0x94bf804d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalAssets()",
+     "selector": "0x01e1d114"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "functioncontract",
+     "name": "ReentrancyGuardTrait._ensureNotEntered()",
+     "selector": "0x630c6c83"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "modifier",
+     "name": "ReentrancyGuardTrait.nonReentrant()",
+     "selector": "0x129ea136"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toInt256(uint256)",
+     "selector": "0xdfbe873b"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint128(uint256)",
+     "selector": "0x809fdd33"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint256(int256)",
+     "selector": "0xfdcf791b"
+    },
+    {
+     "contract": "SafeERC20",
+     "kind": "functioncontract",
+     "name": "SafeERC20._callOptionalReturn(IERC20,bytes)",
+     "selector": "0xf8b2cf29"
+    },
+    {
+     "contract": "SafeERC20",
+     "kind": "functioncontract",
+     "name": "SafeERC20.safeTransferFrom(IERC20,address,address,uint256)",
+     "selector": "0xd9fc4b61"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "functioncontract",
+     "name": "SanityCheckTrait._revertIfZeroAddress(address)",
+     "selector": "0xebeb1b8c"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "modifier",
+     "name": "SanityCheckTrait.nonZeroAddress(address)",
+     "selector": "0x7095dee8"
+    }
+   ],
+   "inputs": [
+    [
+     "shares",
+     "uint256"
+    ],
+    [
+     "receiver",
+     "address"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "assets",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ERC20._balances",
+    "ERC20._totalSupply",
+    "ERC4626._asset",
+    "Pausable._paused",
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.interestRateModel",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ],
+   "state_variables_written_keys": [
+    "ERC20._balances",
+    "ERC20._totalSupply",
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ]
+  },
+  "PoolV3.mintWithReferral(uint256,address,uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address._revert(bytes,string)",
+     "selector": "0x6cadf5e1"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.functionCall(address,bytes,string)",
+     "selector": "0x241b5886"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.functionCallWithValue(address,bytes,uint256,string)",
+     "selector": "0xd525ab8a"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.isContract(address)",
+     "selector": "0x16279055"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.verifyCallResultFromTarget(address,bool,bytes,string)",
+     "selector": "0x1daa78c1"
+    },
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._afterTokenTransfer(address,address,uint256)",
+     "selector": "0x8f811a1c"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._beforeTokenTransfer(address,address,uint256)",
+     "selector": "0xcad3be83"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._mint(address,uint256)",
+     "selector": "0x4e6ec247"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.totalSupply()",
+     "selector": "0x18160ddd"
+    },
+    {
+     "contract": "ERC4626",
+     "kind": "functioncontract",
+     "name": "ERC4626.asset()",
+     "selector": "0x38d52e0f"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256)",
+     "selector": "0xaa9a0912"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256,Math.Rounding)",
+     "selector": "0x1a134248"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable._requireNotPaused()",
+     "selector": "0xabb87a6f"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable.paused()",
+     "selector": "0x5c975abb"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "modifier",
+     "name": "Pausable.whenNotPaused()",
+     "selector": "0x5c2dc4f0"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._amountWithFee(uint256)",
+     "selector": "0x0b8d7dcd"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestIndex(uint256)",
+     "selector": "0x6d30b02f"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToAssets(uint256,Math.Rounding)",
+     "selector": "0x6fa5b1cd"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._deposit(address,uint256,uint256,uint256)",
+     "selector": "0xfc0c0501"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._updateBaseInterest(int256,int256,bool)",
+     "selector": "0x396a3e69"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.availableLiquidity()",
+     "selector": "0x74375359"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.mint(uint256,address)",
+     "selector": "0x94bf804d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.mintWithReferral(uint256,address,uint256)",
+     "selector": "0xd7337c2e"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalAssets()",
+     "selector": "0x01e1d114"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "functioncontract",
+     "name": "ReentrancyGuardTrait._ensureNotEntered()",
+     "selector": "0x630c6c83"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "modifier",
+     "name": "ReentrancyGuardTrait.nonReentrant()",
+     "selector": "0x129ea136"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toInt256(uint256)",
+     "selector": "0xdfbe873b"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint128(uint256)",
+     "selector": "0x809fdd33"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint256(int256)",
+     "selector": "0xfdcf791b"
+    },
+    {
+     "contract": "SafeERC20",
+     "kind": "functioncontract",
+     "name": "SafeERC20._callOptionalReturn(IERC20,bytes)",
+     "selector": "0xf8b2cf29"
+    },
+    {
+     "contract": "SafeERC20",
+     "kind": "functioncontract",
+     "name": "SafeERC20.safeTransferFrom(IERC20,address,address,uint256)",
+     "selector": "0xd9fc4b61"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "functioncontract",
+     "name": "SanityCheckTrait._revertIfZeroAddress(address)",
+     "selector": "0xebeb1b8c"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "modifier",
+     "name": "SanityCheckTrait.nonZeroAddress(address)",
+     "selector": "0x7095dee8"
+    }
+   ],
+   "inputs": [
+    [
+     "shares",
+     "uint256"
+    ],
+    [
+     "receiver",
+     "address"
+    ],
+    [
+     "referralCode",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "assets",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ERC20._balances",
+    "ERC20._totalSupply",
+    "ERC4626._asset",
+    "Pausable._paused",
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.interestRateModel",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ],
+   "state_variables_written_keys": [
+    "ERC20._balances",
+    "ERC20._totalSupply",
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ]
+  },
+  "PoolV3.pause()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "ACLTrait",
+     "kind": "functioncontract",
+     "name": "ACLTrait._ensureCallerIsPausableAdmin()",
+     "selector": "0xb51ce23e"
+    },
+    {
+     "contract": "ACLTrait",
+     "kind": "functioncontract",
+     "name": "ACLTrait._hasRole(bytes32,address)",
+     "selector": "0x1cd1731c"
+    },
+    {
+     "contract": "ACLTrait",
+     "kind": "modifier",
+     "name": "ACLTrait.pausableAdminsOnly()",
+     "selector": "0x37693002"
+    },
+    {
+     "contract": "Context",
+     "kind": "functioncontract",
+     "name": "Context._msgSender()",
+     "selector": "0x119df25f"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable._pause()",
+     "selector": "0x320b2ad9"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable._requireNotPaused()",
+     "selector": "0xabb87a6f"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable.paused()",
+     "selector": "0x5c975abb"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "modifier",
+     "name": "Pausable.whenNotPaused()",
+     "selector": "0x5c2dc4f0"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.pause()",
+     "selector": "0x8456cb59"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ACLTrait.acl",
+    "Pausable._paused"
+   ],
+   "state_variables_written_keys": [
+    "Pausable._paused"
+   ]
+  },
+  "PoolV3.redeem(uint256,address,address)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address._revert(bytes,string)",
+     "selector": "0x6cadf5e1"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.functionCall(address,bytes,string)",
+     "selector": "0x241b5886"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.functionCallWithValue(address,bytes,uint256,string)",
+     "selector": "0xd525ab8a"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.isContract(address)",
+     "selector": "0x16279055"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.verifyCallResultFromTarget(address,bool,bytes,string)",
+     "selector": "0x1daa78c1"
+    },
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._afterTokenTransfer(address,address,uint256)",
+     "selector": "0x8f811a1c"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._approve(address,address,uint256)",
+     "selector": "0x104e81ff"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._beforeTokenTransfer(address,address,uint256)",
+     "selector": "0xcad3be83"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._burn(address,uint256)",
+     "selector": "0x6161eb18"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._spendAllowance(address,address,uint256)",
+     "selector": "0x1532335e"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.allowance(address,address)",
+     "selector": "0xdd62ed3e"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.totalSupply()",
+     "selector": "0x18160ddd"
+    },
+    {
+     "contract": "ERC4626",
+     "kind": "functioncontract",
+     "name": "ERC4626.asset()",
+     "selector": "0x38d52e0f"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256)",
+     "selector": "0xaa9a0912"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256,Math.Rounding)",
+     "selector": "0x1a134248"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable._requireNotPaused()",
+     "selector": "0xabb87a6f"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable.paused()",
+     "selector": "0x5c975abb"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "modifier",
+     "name": "Pausable.whenNotPaused()",
+     "selector": "0x5c2dc4f0"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._amountMinusFee(uint256)",
+     "selector": "0xbcc86729"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._amountMinusWithdrawalFee(uint256)",
+     "selector": "0x186d27b6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestIndex(uint256)",
+     "selector": "0x6d30b02f"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToAssets(uint256,Math.Rounding)",
+     "selector": "0x6fa5b1cd"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._updateBaseInterest(int256,int256,bool)",
+     "selector": "0x396a3e69"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._withdraw(address,address,uint256,uint256,uint256,uint256)",
+     "selector": "0x120291ea"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.availableLiquidity()",
+     "selector": "0x74375359"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.redeem(uint256,address,address)",
+     "selector": "0xba087652"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalAssets()",
+     "selector": "0x01e1d114"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "functioncontract",
+     "name": "ReentrancyGuardTrait._ensureNotEntered()",
+     "selector": "0x630c6c83"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "modifier",
+     "name": "ReentrancyGuardTrait.nonReentrant()",
+     "selector": "0x129ea136"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toInt256(uint256)",
+     "selector": "0xdfbe873b"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint128(uint256)",
+     "selector": "0x809fdd33"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint256(int256)",
+     "selector": "0xfdcf791b"
+    },
+    {
+     "contract": "SafeERC20",
+     "kind": "functioncontract",
+     "name": "SafeERC20._callOptionalReturn(IERC20,bytes)",
+     "selector": "0xf8b2cf29"
+    },
+    {
+     "contract": "SafeERC20",
+     "kind": "functioncontract",
+     "name": "SafeERC20.safeTransfer(IERC20,address,uint256)",
+     "selector": "0xd1660f99"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "functioncontract",
+     "name": "SanityCheckTrait._revertIfZeroAddress(address)",
+     "selector": "0xebeb1b8c"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "modifier",
+     "name": "SanityCheckTrait.nonZeroAddress(address)",
+     "selector": "0x7095dee8"
+    }
+   ],
+   "inputs": [
+    [
+     "shares",
+     "uint256"
+    ],
+    [
+     "receiver",
+     "address"
+    ],
+    [
+     "owner",
+     "address"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "assets",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ERC20._allowances",
+    "ERC20._balances",
+    "ERC20._totalSupply",
+    "ERC4626._asset",
+    "Pausable._paused",
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.interestRateModel",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "PoolV3.treasury",
+    "PoolV3.withdrawFee",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ],
+   "state_variables_written_keys": [
+    "ERC20._allowances",
+    "ERC20._balances",
+    "ERC20._totalSupply",
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ]
+  },
+  "PoolV3.repayCreditAccount(uint256,uint256,uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._afterTokenTransfer(address,address,uint256)",
+     "selector": "0x8f811a1c"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._beforeTokenTransfer(address,address,uint256)",
+     "selector": "0xcad3be83"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._burn(address,uint256)",
+     "selector": "0x6161eb18"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._mint(address,uint256)",
+     "selector": "0x4e6ec247"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.balanceOf(address)",
+     "selector": "0x70a08231"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.totalSupply()",
+     "selector": "0x18160ddd"
+    },
+    {
+     "contract": "ERC4626",
+     "kind": "functioncontract",
+     "name": "ERC4626.convertToAssets(uint256)",
+     "selector": "0x07a2d13a"
+    },
+    {
+     "contract": "ERC4626",
+     "kind": "functioncontract",
+     "name": "ERC4626.convertToShares(uint256)",
+     "selector": "0xc6e6f592"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256)",
+     "selector": "0xaa9a0912"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256,Math.Rounding)",
+     "selector": "0x1a134248"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestIndex(uint256)",
+     "selector": "0x6d30b02f"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToAssets(uint256,Math.Rounding)",
+     "selector": "0x6fa5b1cd"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToShares(uint256,Math.Rounding)",
+     "selector": "0x608baa9a"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._updateBaseInterest(int256,int256,bool)",
+     "selector": "0x396a3e69"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.availableLiquidity()",
+     "selector": "0x74375359"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.repayCreditAccount(uint256,uint256,uint256)",
+     "selector": "0xca9505e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalAssets()",
+     "selector": "0x01e1d114"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "functioncontract",
+     "name": "ReentrancyGuardTrait._ensureNotEntered()",
+     "selector": "0x630c6c83"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "modifier",
+     "name": "ReentrancyGuardTrait.nonReentrant()",
+     "selector": "0x129ea136"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toInt256(uint256)",
+     "selector": "0xdfbe873b"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint128(uint256)",
+     "selector": "0x809fdd33"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint256(int256)",
+     "selector": "0xfdcf791b"
+    }
+   ],
+   "inputs": [
+    [
+     "repaidAmount",
+     "uint256"
+    ],
+    [
+     "profit",
+     "uint256"
+    ],
+    [
+     "loss",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ERC20._balances",
+    "ERC20._totalSupply",
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._creditManagerDebt",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.interestRateModel",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "PoolV3.treasury",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ],
+   "state_variables_written_keys": [
+    "ERC20._balances",
+    "ERC20._totalSupply",
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._totalDebt",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ]
+  },
+  "PoolV3.setCreditManagerDebtLimit(address,uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "ACLTrait",
+     "kind": "functioncontract",
+     "name": "ACLTrait._ensureCallerIsConfigurator()",
+     "selector": "0x74eaa5ea"
+    },
+    {
+     "contract": "ACLTrait",
+     "kind": "functioncontract",
+     "name": "ACLTrait._isConfigurator(address)",
+     "selector": "0x2ad9bb6f"
+    },
+    {
+     "contract": "ACLTrait",
+     "kind": "modifier",
+     "name": "ACLTrait.configuratorOnly()",
+     "selector": "0x2d724411"
+    },
+    {
+     "contract": "ContractsRegisterTrait",
+     "kind": "functioncontract",
+     "name": "ContractsRegisterTrait._ensureRegisteredCreditManager(address)",
+     "selector": "0x6a2c5901"
+    },
+    {
+     "contract": "ContractsRegisterTrait",
+     "kind": "modifier",
+     "name": "ContractsRegisterTrait.registeredCreditManagerOnly(address)",
+     "selector": "0xf2fd7aa2"
+    },
+    {
+     "contract": "EnumerableSet",
+     "kind": "functioncontract",
+     "name": "EnumerableSet._add(EnumerableSet.Set,bytes32)",
+     "selector": "0xdd782d27"
+    },
+    {
+     "contract": "EnumerableSet",
+     "kind": "functioncontract",
+     "name": "EnumerableSet._contains(EnumerableSet.Set,bytes32)",
+     "selector": "0xedee8e08"
+    },
+    {
+     "contract": "EnumerableSet",
+     "kind": "functioncontract",
+     "name": "EnumerableSet.add(EnumerableSet.AddressSet,address)",
+     "selector": "0x2f7bad11"
+    },
+    {
+     "contract": "EnumerableSet",
+     "kind": "functioncontract",
+     "name": "EnumerableSet.contains(EnumerableSet.AddressSet,address)",
+     "selector": "0x1f33f72b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToU128(uint256)",
+     "selector": "0x6c6549f5"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.setCreditManagerDebtLimit(address,uint256)",
+     "selector": "0x79e4e3a9"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint128(uint256)",
+     "selector": "0x809fdd33"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "functioncontract",
+     "name": "SanityCheckTrait._revertIfZeroAddress(address)",
+     "selector": "0xebeb1b8c"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "modifier",
+     "name": "SanityCheckTrait.nonZeroAddress(address)",
+     "selector": "0x7095dee8"
+    }
+   ],
+   "inputs": [
+    [
+     "creditManager",
+     "address"
+    ],
+    [
+     "newLimit",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ACLTrait.acl",
+    "ContractsRegisterTrait.contractsRegister",
+    "PoolV3._creditManagerDebt",
+    "PoolV3._creditManagerSet"
+   ],
+   "state_variables_written_keys": [
+    "PoolV3._creditManagerDebt",
+    "PoolV3._creditManagerSet"
+   ]
+  },
+  "PoolV3.setInterestRateModel(address)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "ACLTrait",
+     "kind": "functioncontract",
+     "name": "ACLTrait._ensureCallerIsConfigurator()",
+     "selector": "0x74eaa5ea"
+    },
+    {
+     "contract": "ACLTrait",
+     "kind": "functioncontract",
+     "name": "ACLTrait._isConfigurator(address)",
+     "selector": "0x2ad9bb6f"
+    },
+    {
+     "contract": "ACLTrait",
+     "kind": "modifier",
+     "name": "ACLTrait.configuratorOnly()",
+     "selector": "0x2d724411"
+    },
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestIndex(uint256)",
+     "selector": "0x6d30b02f"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._updateBaseInterest(int256,int256,bool)",
+     "selector": "0x396a3e69"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.availableLiquidity()",
+     "selector": "0x74375359"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.setInterestRateModel(address)",
+     "selector": "0x8bcd4016"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toInt256(uint256)",
+     "selector": "0xdfbe873b"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint128(uint256)",
+     "selector": "0x809fdd33"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint256(int256)",
+     "selector": "0xfdcf791b"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "functioncontract",
+     "name": "SanityCheckTrait._revertIfZeroAddress(address)",
+     "selector": "0xebeb1b8c"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "modifier",
+     "name": "SanityCheckTrait.nonZeroAddress(address)",
+     "selector": "0x7095dee8"
+    }
+   ],
+   "inputs": [
+    [
+     "newInterestRateModel",
+     "address"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ACLTrait.acl",
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.interestRateModel",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate"
+   ],
+   "state_variables_written_keys": [
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3.interestRateModel",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate"
+   ]
+  },
+  "PoolV3.setPoolQuotaKeeper(address)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "ACLTrait",
+     "kind": "functioncontract",
+     "name": "ACLTrait._ensureCallerIsConfigurator()",
+     "selector": "0x74eaa5ea"
+    },
+    {
+     "contract": "ACLTrait",
+     "kind": "functioncontract",
+     "name": "ACLTrait._isConfigurator(address)",
+     "selector": "0x2ad9bb6f"
+    },
+    {
+     "contract": "ACLTrait",
+     "kind": "modifier",
+     "name": "ACLTrait.configuratorOnly()",
+     "selector": "0x2d724411"
+    },
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._setQuotaRevenue(uint256)",
+     "selector": "0x5db15cc5"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.setPoolQuotaKeeper(address)",
+     "selector": "0x1ab7c7d7"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint128(uint256)",
+     "selector": "0x809fdd33"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint96(uint256)",
+     "selector": "0x1cf887fc"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "functioncontract",
+     "name": "SanityCheckTrait._revertIfZeroAddress(address)",
+     "selector": "0xebeb1b8c"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "modifier",
+     "name": "SanityCheckTrait.nonZeroAddress(address)",
+     "selector": "0x7095dee8"
+    }
+   ],
+   "inputs": [
+    [
+     "newPoolQuotaKeeper",
+     "address"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ACLTrait.acl",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "PoolV3.poolQuotaKeeper"
+   ],
+   "state_variables_written_keys": [
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "PoolV3.poolQuotaKeeper"
+   ]
+  },
+  "PoolV3.setQuotaRevenue(uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._revertIfCallerIsNotPoolQuotaKeeper()",
+     "selector": "0xc2e217dc"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._setQuotaRevenue(uint256)",
+     "selector": "0x5db15cc5"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "modifier",
+     "name": "PoolV3.poolQuotaKeeperOnly()",
+     "selector": "0xfaf1d83c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.setQuotaRevenue(uint256)",
+     "selector": "0x275df3ad"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "functioncontract",
+     "name": "ReentrancyGuardTrait._ensureNotEntered()",
+     "selector": "0x630c6c83"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "modifier",
+     "name": "ReentrancyGuardTrait.nonReentrant()",
+     "selector": "0x129ea136"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint128(uint256)",
+     "selector": "0x809fdd33"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint96(uint256)",
+     "selector": "0x1cf887fc"
+    }
+   ],
+   "inputs": [
+    [
+     "newQuotaRevenue",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "PoolV3.poolQuotaKeeper",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ],
+   "state_variables_written_keys": [
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ]
+  },
+  "PoolV3.setTotalDebtLimit(uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "ACLTrait",
+     "kind": "functioncontract",
+     "name": "ACLTrait._ensureCallerIsConfigurator()",
+     "selector": "0x74eaa5ea"
+    },
+    {
+     "contract": "ACLTrait",
+     "kind": "functioncontract",
+     "name": "ACLTrait._isConfigurator(address)",
+     "selector": "0x2ad9bb6f"
+    },
+    {
+     "contract": "ACLTrait",
+     "kind": "modifier",
+     "name": "ACLTrait.configuratorOnly()",
+     "selector": "0x2d724411"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToU128(uint256)",
+     "selector": "0x6c6549f5"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._setTotalDebtLimit(uint256)",
+     "selector": "0xb565c772"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.setTotalDebtLimit(uint256)",
+     "selector": "0x871d7268"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint128(uint256)",
+     "selector": "0x809fdd33"
+    }
+   ],
+   "inputs": [
+    [
+     "newLimit",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ACLTrait.acl",
+    "PoolV3._totalDebt"
+   ],
+   "state_variables_written_keys": [
+    "PoolV3._totalDebt"
+   ]
+  },
+  "PoolV3.setWithdrawFee(uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "ACLTrait",
+     "kind": "functioncontract",
+     "name": "ACLTrait._ensureCallerIsConfigurator()",
+     "selector": "0x74eaa5ea"
+    },
+    {
+     "contract": "ACLTrait",
+     "kind": "functioncontract",
+     "name": "ACLTrait._isConfigurator(address)",
+     "selector": "0x2ad9bb6f"
+    },
+    {
+     "contract": "ACLTrait",
+     "kind": "modifier",
+     "name": "ACLTrait.configuratorOnly()",
+     "selector": "0x2d724411"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.setWithdrawFee(uint256)",
+     "selector": "0xb6ac642a"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint16(uint256)",
+     "selector": "0x9374068f"
+    }
+   ],
+   "inputs": [
+    [
+     "newWithdrawFee",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ACLTrait.acl",
+    "PoolV3.withdrawFee"
+   ],
+   "state_variables_written_keys": [
+    "PoolV3.withdrawFee"
+   ]
+  },
+  "PoolV3.unpause()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "ACLTrait",
+     "kind": "functioncontract",
+     "name": "ACLTrait._ensureCallerIsUnpausableAdmin()",
+     "selector": "0xc52b830c"
+    },
+    {
+     "contract": "ACLTrait",
+     "kind": "functioncontract",
+     "name": "ACLTrait._hasRole(bytes32,address)",
+     "selector": "0x1cd1731c"
+    },
+    {
+     "contract": "ACLTrait",
+     "kind": "modifier",
+     "name": "ACLTrait.unpausableAdminsOnly()",
+     "selector": "0xf7199e97"
+    },
+    {
+     "contract": "Context",
+     "kind": "functioncontract",
+     "name": "Context._msgSender()",
+     "selector": "0x119df25f"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable._requirePaused()",
+     "selector": "0x4a994e05"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable._unpause()",
+     "selector": "0xfc8234cb"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable.paused()",
+     "selector": "0x5c975abb"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "modifier",
+     "name": "Pausable.whenPaused()",
+     "selector": "0x9aa88d05"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.unpause()",
+     "selector": "0x3f4ba83a"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ACLTrait.acl",
+    "Pausable._paused"
+   ],
+   "state_variables_written_keys": [
+    "Pausable._paused"
+   ]
+  },
+  "PoolV3.updateQuotaRevenue(int256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._revertIfCallerIsNotPoolQuotaKeeper()",
+     "selector": "0xc2e217dc"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._setQuotaRevenue(uint256)",
+     "selector": "0x5db15cc5"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "modifier",
+     "name": "PoolV3.poolQuotaKeeperOnly()",
+     "selector": "0xfaf1d83c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.updateQuotaRevenue(int256)",
+     "selector": "0xd6458eea"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "functioncontract",
+     "name": "ReentrancyGuardTrait._ensureNotEntered()",
+     "selector": "0x630c6c83"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "modifier",
+     "name": "ReentrancyGuardTrait.nonReentrant()",
+     "selector": "0x129ea136"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toInt256(uint256)",
+     "selector": "0xdfbe873b"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint128(uint256)",
+     "selector": "0x809fdd33"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint256(int256)",
+     "selector": "0xfdcf791b"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint96(uint256)",
+     "selector": "0x1cf887fc"
+    }
+   ],
+   "inputs": [
+    [
+     "quotaRevenueDelta",
+     "int256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "PoolV3.poolQuotaKeeper",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ],
+   "state_variables_written_keys": [
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ]
+  },
+  "PoolV3.withdraw(uint256,address,address)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address._revert(bytes,string)",
+     "selector": "0x6cadf5e1"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.functionCall(address,bytes,string)",
+     "selector": "0x241b5886"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.functionCallWithValue(address,bytes,uint256,string)",
+     "selector": "0xd525ab8a"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.isContract(address)",
+     "selector": "0x16279055"
+    },
+    {
+     "contract": "Address",
+     "kind": "functioncontract",
+     "name": "Address.verifyCallResultFromTarget(address,bool,bytes,string)",
+     "selector": "0x1daa78c1"
+    },
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._afterTokenTransfer(address,address,uint256)",
+     "selector": "0x8f811a1c"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._approve(address,address,uint256)",
+     "selector": "0x104e81ff"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._beforeTokenTransfer(address,address,uint256)",
+     "selector": "0xcad3be83"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._burn(address,uint256)",
+     "selector": "0x6161eb18"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20._spendAllowance(address,address,uint256)",
+     "selector": "0x1532335e"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.allowance(address,address)",
+     "selector": "0xdd62ed3e"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.totalSupply()",
+     "selector": "0x18160ddd"
+    },
+    {
+     "contract": "ERC4626",
+     "kind": "functioncontract",
+     "name": "ERC4626.asset()",
+     "selector": "0x38d52e0f"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256)",
+     "selector": "0xaa9a0912"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256,Math.Rounding)",
+     "selector": "0x1a134248"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable._requireNotPaused()",
+     "selector": "0xabb87a6f"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable.paused()",
+     "selector": "0x5c975abb"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "modifier",
+     "name": "Pausable.whenNotPaused()",
+     "selector": "0x5c2dc4f0"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._amountWithFee(uint256)",
+     "selector": "0x0b8d7dcd"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._amountWithWithdrawalFee(uint256)",
+     "selector": "0xd6500fcb"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestIndex(uint256)",
+     "selector": "0x6d30b02f"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToShares(uint256,Math.Rounding)",
+     "selector": "0x608baa9a"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._updateBaseInterest(int256,int256,bool)",
+     "selector": "0x396a3e69"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._withdraw(address,address,uint256,uint256,uint256,uint256)",
+     "selector": "0x120291ea"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.availableLiquidity()",
+     "selector": "0x74375359"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalAssets()",
+     "selector": "0x01e1d114"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.withdraw(uint256,address,address)",
+     "selector": "0xb460af94"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "functioncontract",
+     "name": "ReentrancyGuardTrait._ensureNotEntered()",
+     "selector": "0x630c6c83"
+    },
+    {
+     "contract": "ReentrancyGuardTrait",
+     "kind": "modifier",
+     "name": "ReentrancyGuardTrait.nonReentrant()",
+     "selector": "0x129ea136"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toInt256(uint256)",
+     "selector": "0xdfbe873b"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint128(uint256)",
+     "selector": "0x809fdd33"
+    },
+    {
+     "contract": "SafeCast",
+     "kind": "functioncontract",
+     "name": "SafeCast.toUint256(int256)",
+     "selector": "0xfdcf791b"
+    },
+    {
+     "contract": "SafeERC20",
+     "kind": "functioncontract",
+     "name": "SafeERC20._callOptionalReturn(IERC20,bytes)",
+     "selector": "0xf8b2cf29"
+    },
+    {
+     "contract": "SafeERC20",
+     "kind": "functioncontract",
+     "name": "SafeERC20.safeTransfer(IERC20,address,uint256)",
+     "selector": "0xd1660f99"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "functioncontract",
+     "name": "SanityCheckTrait._revertIfZeroAddress(address)",
+     "selector": "0xebeb1b8c"
+    },
+    {
+     "contract": "SanityCheckTrait",
+     "kind": "modifier",
+     "name": "SanityCheckTrait.nonZeroAddress(address)",
+     "selector": "0x7095dee8"
+    }
+   ],
+   "inputs": [
+    [
+     "assets",
+     "uint256"
+    ],
+    [
+     "receiver",
+     "address"
+    ],
+    [
+     "owner",
+     "address"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "shares",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": true,
+   "state_variables_read_keys": [
+    "ERC20._allowances",
+    "ERC20._balances",
+    "ERC20._totalSupply",
+    "ERC4626._asset",
+    "Pausable._paused",
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.interestRateModel",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "PoolV3.treasury",
+    "PoolV3.withdrawFee",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ],
+   "state_variables_written_keys": [
+    "ERC20._allowances",
+    "ERC20._balances",
+    "ERC20._totalSupply",
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "ReentrancyGuardTrait._reentrancyStatus"
+   ]
+  }
+ },
+ "read_only_entries": {
+  "EIP712.eip712Domain()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "EIP712",
+     "kind": "functioncontract",
+     "name": "EIP712.eip712Domain()",
+     "selector": "0x84b0196e"
+    },
+    {
+     "contract": "ShortStrings",
+     "kind": "functioncontract",
+     "name": "ShortStrings.byteLength(ShortString)",
+     "selector": "0x25a62ead"
+    },
+    {
+     "contract": "ShortStrings",
+     "kind": "functioncontract",
+     "name": "ShortStrings.toString(ShortString)",
+     "selector": "0xb11a19e8"
+    },
+    {
+     "contract": "ShortStrings",
+     "kind": "functioncontract",
+     "name": "ShortStrings.toStringWithFallback(ShortString,string)",
+     "selector": "0x20565881"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "fields",
+     "bytes1"
+    ],
+    [
+     "name",
+     "string"
+    ],
+    [
+     "version",
+     "string"
+    ],
+    [
+     "chainId",
+     "uint256"
+    ],
+    [
+     "verifyingContract",
+     "address"
+    ],
+    [
+     "salt",
+     "bytes32"
+    ],
+    [
+     "extensions",
+     "uint256[]"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "EIP712._name",
+    "EIP712._nameFallback",
+    "EIP712._version",
+    "EIP712._versionFallback",
+    "ShortStrings._FALLBACK_SENTINEL"
+   ],
+   "state_variables_written_keys": []
+  },
+  "ERC20.allowance(address,address)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.allowance(address,address)",
+     "selector": "0xdd62ed3e"
+    }
+   ],
+   "inputs": [
+    [
+     "owner",
+     "address"
+    ],
+    [
+     "spender",
+     "address"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ERC20._allowances"
+   ],
+   "state_variables_written_keys": []
+  },
+  "ERC20.balanceOf(address)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.balanceOf(address)",
+     "selector": "0x70a08231"
+    }
+   ],
+   "inputs": [
+    [
+     "account",
+     "address"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ERC20._balances"
+   ],
+   "state_variables_written_keys": []
+  },
+  "ERC20.name()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.name()",
+     "selector": "0x06fdde03"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "string"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ERC20._name"
+   ],
+   "state_variables_written_keys": []
+  },
+  "ERC20.symbol()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.symbol()",
+     "selector": "0x95d89b41"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "string"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ERC20._symbol"
+   ],
+   "state_variables_written_keys": []
+  },
+  "ERC20.totalSupply()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.totalSupply()",
+     "selector": "0x18160ddd"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ERC20._totalSupply"
+   ],
+   "state_variables_written_keys": []
+  },
+  "ERC20Permit.DOMAIN_SEPARATOR()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "EIP712",
+     "kind": "functioncontract",
+     "name": "EIP712._buildDomainSeparator()",
+     "selector": "0x95ae0604"
+    },
+    {
+     "contract": "EIP712",
+     "kind": "functioncontract",
+     "name": "EIP712._domainSeparatorV4()",
+     "selector": "0x7b134b4c"
+    },
+    {
+     "contract": "ERC20Permit",
+     "kind": "functioncontract",
+     "name": "ERC20Permit.DOMAIN_SEPARATOR()",
+     "selector": "0x3644e515"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "bytes32"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "EIP712._TYPE_HASH",
+    "EIP712._cachedChainId",
+    "EIP712._cachedDomainSeparator",
+    "EIP712._cachedThis",
+    "EIP712._hashedName",
+    "EIP712._hashedVersion"
+   ],
+   "state_variables_written_keys": []
+  },
+  "ERC20Permit.nonces(address)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "Counters",
+     "kind": "functioncontract",
+     "name": "Counters.current(Counters.Counter)",
+     "selector": "0xe25b0bbc"
+    },
+    {
+     "contract": "ERC20Permit",
+     "kind": "functioncontract",
+     "name": "ERC20Permit.nonces(address)",
+     "selector": "0x7ecebe00"
+    }
+   ],
+   "inputs": [
+    [
+     "owner",
+     "address"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ERC20Permit._nonces"
+   ],
+   "state_variables_written_keys": []
+  },
+  "ERC4626.asset()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "ERC4626",
+     "kind": "functioncontract",
+     "name": "ERC4626.asset()",
+     "selector": "0x38d52e0f"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "address"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ERC4626._asset"
+   ],
+   "state_variables_written_keys": []
+  },
+  "ERC4626.convertToAssets(uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.totalSupply()",
+     "selector": "0x18160ddd"
+    },
+    {
+     "contract": "ERC4626",
+     "kind": "functioncontract",
+     "name": "ERC4626.convertToAssets(uint256)",
+     "selector": "0x07a2d13a"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256)",
+     "selector": "0xaa9a0912"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256,Math.Rounding)",
+     "selector": "0x1a134248"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToAssets(uint256,Math.Rounding)",
+     "selector": "0x6fa5b1cd"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalAssets()",
+     "selector": "0x01e1d114"
+    }
+   ],
+   "inputs": [
+    [
+     "shares",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ERC20._totalSupply",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate"
+   ],
+   "state_variables_written_keys": []
+  },
+  "ERC4626.convertToShares(uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.totalSupply()",
+     "selector": "0x18160ddd"
+    },
+    {
+     "contract": "ERC4626",
+     "kind": "functioncontract",
+     "name": "ERC4626.convertToShares(uint256)",
+     "selector": "0xc6e6f592"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256)",
+     "selector": "0xaa9a0912"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256,Math.Rounding)",
+     "selector": "0x1a134248"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToShares(uint256,Math.Rounding)",
+     "selector": "0x608baa9a"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalAssets()",
+     "selector": "0x01e1d114"
+    }
+   ],
+   "inputs": [
+    [
+     "assets",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ERC20._totalSupply",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate"
+   ],
+   "state_variables_written_keys": []
+  },
+  "IACLTrait.acl()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "IACLTrait",
+     "kind": "functioncontract",
+     "name": "IACLTrait.acl()",
+     "selector": "0xde287359"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "address"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ACLTrait.acl"
+   ],
+   "state_variables_written_keys": []
+  },
+  "IContractsRegisterTrait.contractsRegister()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "IContractsRegisterTrait",
+     "kind": "functioncontract",
+     "name": "IContractsRegisterTrait.contractsRegister()",
+     "selector": "0x7a0c7b21"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "address"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ContractsRegisterTrait.contractsRegister"
+   ],
+   "state_variables_written_keys": []
+  },
+  "IPoolV3.interestRateModel()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "IPoolV3",
+     "kind": "functioncontract",
+     "name": "IPoolV3.interestRateModel()",
+     "selector": "0xf3fdb15a"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "address"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3.interestRateModel"
+   ],
+   "state_variables_written_keys": []
+  },
+  "IPoolV3.lastBaseInterestUpdate()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "IPoolV3",
+     "kind": "functioncontract",
+     "name": "IPoolV3.lastBaseInterestUpdate()",
+     "selector": "0x6b88245b"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint40"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3.lastBaseInterestUpdate"
+   ],
+   "state_variables_written_keys": []
+  },
+  "IPoolV3.lastQuotaRevenueUpdate()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "IPoolV3",
+     "kind": "functioncontract",
+     "name": "IPoolV3.lastQuotaRevenueUpdate()",
+     "selector": "0x88ae7842"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint40"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3.lastQuotaRevenueUpdate"
+   ],
+   "state_variables_written_keys": []
+  },
+  "IPoolV3.poolQuotaKeeper()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "IPoolV3",
+     "kind": "functioncontract",
+     "name": "IPoolV3.poolQuotaKeeper()",
+     "selector": "0xbe8da14b"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "address"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3.poolQuotaKeeper"
+   ],
+   "state_variables_written_keys": []
+  },
+  "IPoolV3.treasury()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "IPoolV3",
+     "kind": "functioncontract",
+     "name": "IPoolV3.treasury()",
+     "selector": "0x61d027b3"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "address"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3.treasury"
+   ],
+   "state_variables_written_keys": []
+  },
+  "IPoolV3.withdrawFee()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "IPoolV3",
+     "kind": "functioncontract",
+     "name": "IPoolV3.withdrawFee()",
+     "selector": "0xe941fa78"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint16"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3.withdrawFee"
+   ],
+   "state_variables_written_keys": []
+  },
+  "IVersion.version()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "IVersion",
+     "kind": "functioncontract",
+     "name": "IVersion.version()",
+     "selector": "0x54fd4d50"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3.version"
+   ],
+   "state_variables_written_keys": []
+  },
+  "Pausable.paused()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable.paused()",
+     "selector": "0x5c975abb"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "bool"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "Pausable._paused"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.availableLiquidity()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.availableLiquidity()",
+     "selector": "0x74375359"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.baseInterestIndex()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestIndex(uint256)",
+     "selector": "0x6d30b02f"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestIndex()",
+     "selector": "0xfaaba9e2"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3._baseInterestIndexLU",
+    "PoolV3._baseInterestRate",
+    "PoolV3.lastBaseInterestUpdate"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.baseInterestIndexLU()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestIndexLU()",
+     "selector": "0xa74d4910"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3._baseInterestIndexLU"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.baseInterestRate()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3._baseInterestRate"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.contractType()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.contractType()",
+     "selector": "0xcb2ef6f7"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "bytes32"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.creditManagerBorrowable(address)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.min(uint256,uint256)",
+     "selector": "0x7ae2b5c7"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._borrowable(DebtParams)",
+     "selector": "0x42d6fdd1"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.availableLiquidity()",
+     "selector": "0x74375359"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.creditManagerBorrowable(address)",
+     "selector": "0x136a6833"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    }
+   ],
+   "inputs": [
+    [
+     "creditManager",
+     "address"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "borrowable",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3._baseInterestRate",
+    "PoolV3._creditManagerDebt",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.interestRateModel",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.creditManagerBorrowed(address)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.creditManagerBorrowed(address)",
+     "selector": "0x7a99c017"
+    }
+   ],
+   "inputs": [
+    [
+     "creditManager",
+     "address"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3._creditManagerDebt"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.creditManagerDebtLimit(address)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToU256(uint128)",
+     "selector": "0xefb3a280"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.creditManagerDebtLimit(address)",
+     "selector": "0xb0df2c66"
+    }
+   ],
+   "inputs": [
+    [
+     "creditManager",
+     "address"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3._creditManagerDebt"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.creditManagers()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "EnumerableSet",
+     "kind": "functioncontract",
+     "name": "EnumerableSet._values(EnumerableSet.Set)",
+     "selector": "0x63a31798"
+    },
+    {
+     "contract": "EnumerableSet",
+     "kind": "functioncontract",
+     "name": "EnumerableSet.values(EnumerableSet.AddressSet)",
+     "selector": "0x7f6dbc9f"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.creditManagers()",
+     "selector": "0xdac54431"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "address[]"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3._creditManagerSet"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.decimals()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "ERC4626",
+     "kind": "functioncontract",
+     "name": "ERC4626._decimalsOffset()",
+     "selector": "0x2dd95a32"
+    },
+    {
+     "contract": "ERC4626",
+     "kind": "functioncontract",
+     "name": "ERC4626.decimals()",
+     "selector": "0x313ce567"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.decimals()",
+     "selector": "0x313ce567"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint8"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ERC4626._underlyingDecimals"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.expectedLiquidity()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.expectedLiquidityLU()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidityLU()",
+     "selector": "0xc8c98662"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3._expectedLiquidityLU"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.maxDeposit(address)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable.paused()",
+     "selector": "0x5c975abb"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.maxDeposit(address)",
+     "selector": "0x402d267d"
+    }
+   ],
+   "inputs": [
+    [
+     "",
+     "address"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "Pausable._paused"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.maxMint(address)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable.paused()",
+     "selector": "0x5c975abb"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.maxMint(address)",
+     "selector": "0xc63d75b6"
+    }
+   ],
+   "inputs": [
+    [
+     "",
+     "address"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "Pausable._paused"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.maxRedeem(address)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.balanceOf(address)",
+     "selector": "0x70a08231"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.totalSupply()",
+     "selector": "0x18160ddd"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.min(uint256,uint256)",
+     "selector": "0x7ae2b5c7"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256)",
+     "selector": "0xaa9a0912"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256,Math.Rounding)",
+     "selector": "0x1a134248"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable.paused()",
+     "selector": "0x5c975abb"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToShares(uint256,Math.Rounding)",
+     "selector": "0x608baa9a"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.availableLiquidity()",
+     "selector": "0x74375359"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.maxRedeem(address)",
+     "selector": "0xd905777e"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalAssets()",
+     "selector": "0x01e1d114"
+    }
+   ],
+   "inputs": [
+    [
+     "owner",
+     "address"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ERC20._balances",
+    "ERC20._totalSupply",
+    "Pausable._paused",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.maxWithdraw(address)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.balanceOf(address)",
+     "selector": "0x70a08231"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.totalSupply()",
+     "selector": "0x18160ddd"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.min(uint256,uint256)",
+     "selector": "0x7ae2b5c7"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256)",
+     "selector": "0xaa9a0912"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256,Math.Rounding)",
+     "selector": "0x1a134248"
+    },
+    {
+     "contract": "Pausable",
+     "kind": "functioncontract",
+     "name": "Pausable.paused()",
+     "selector": "0x5c975abb"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._amountMinusFee(uint256)",
+     "selector": "0xbcc86729"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._amountMinusWithdrawalFee(uint256)",
+     "selector": "0x186d27b6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToAssets(uint256,Math.Rounding)",
+     "selector": "0x6fa5b1cd"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.availableLiquidity()",
+     "selector": "0x74375359"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.maxWithdraw(address)",
+     "selector": "0xce96cb77"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalAssets()",
+     "selector": "0x01e1d114"
+    }
+   ],
+   "inputs": [
+    [
+     "owner",
+     "address"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ERC20._balances",
+    "ERC20._totalSupply",
+    "Pausable._paused",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "PoolV3.withdrawFee"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.previewDeposit(uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.totalSupply()",
+     "selector": "0x18160ddd"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256)",
+     "selector": "0xaa9a0912"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256,Math.Rounding)",
+     "selector": "0x1a134248"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._amountMinusFee(uint256)",
+     "selector": "0xbcc86729"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToShares(uint256,Math.Rounding)",
+     "selector": "0x608baa9a"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.previewDeposit(uint256)",
+     "selector": "0xef8b30f7"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalAssets()",
+     "selector": "0x01e1d114"
+    }
+   ],
+   "inputs": [
+    [
+     "assets",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ERC20._totalSupply",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.previewMint(uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.totalSupply()",
+     "selector": "0x18160ddd"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256)",
+     "selector": "0xaa9a0912"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256,Math.Rounding)",
+     "selector": "0x1a134248"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._amountWithFee(uint256)",
+     "selector": "0x0b8d7dcd"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToAssets(uint256,Math.Rounding)",
+     "selector": "0x6fa5b1cd"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.previewMint(uint256)",
+     "selector": "0xb3d7f6b9"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalAssets()",
+     "selector": "0x01e1d114"
+    }
+   ],
+   "inputs": [
+    [
+     "shares",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ERC20._totalSupply",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.previewRedeem(uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.totalSupply()",
+     "selector": "0x18160ddd"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256)",
+     "selector": "0xaa9a0912"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256,Math.Rounding)",
+     "selector": "0x1a134248"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._amountMinusFee(uint256)",
+     "selector": "0xbcc86729"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._amountMinusWithdrawalFee(uint256)",
+     "selector": "0x186d27b6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToAssets(uint256,Math.Rounding)",
+     "selector": "0x6fa5b1cd"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.previewRedeem(uint256)",
+     "selector": "0x4cdad506"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalAssets()",
+     "selector": "0x01e1d114"
+    }
+   ],
+   "inputs": [
+    [
+     "shares",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ERC20._totalSupply",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "PoolV3.withdrawFee"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.previewWithdraw(uint256)": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "ERC20",
+     "kind": "functioncontract",
+     "name": "ERC20.totalSupply()",
+     "selector": "0x18160ddd"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256)",
+     "selector": "0xaa9a0912"
+    },
+    {
+     "contract": "Math",
+     "kind": "functioncontract",
+     "name": "Math.mulDiv(uint256,uint256,uint256,Math.Rounding)",
+     "selector": "0x1a134248"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._amountWithFee(uint256)",
+     "selector": "0x0b8d7dcd"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._amountWithWithdrawalFee(uint256)",
+     "selector": "0xd6500fcb"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToShares(uint256,Math.Rounding)",
+     "selector": "0x608baa9a"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.previewWithdraw(uint256)",
+     "selector": "0x0a28a477"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalAssets()",
+     "selector": "0x01e1d114"
+    }
+   ],
+   "inputs": [
+    [
+     "assets",
+     "uint256"
+    ]
+   ],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ERC20._totalSupply",
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "PoolV3.withdrawFee"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.quotaRevenue()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3._quotaRevenue"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.supplyRate()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.supplyRate()",
+     "selector": "0xad2961a3"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate",
+    "PoolV3.withdrawFee"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.totalAssets()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "CreditLogic",
+     "kind": "functioncontract",
+     "name": "CreditLogic.calcLinearGrowth(uint256,uint256)",
+     "selector": "0xd40b02aa"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued()",
+     "selector": "0x6e68e423"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcBaseInterestAccrued(uint256)",
+     "selector": "0x941f661b"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued()",
+     "selector": "0x29e0702c"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._calcQuotaRevenueAccrued(uint256)",
+     "selector": "0x483b49e6"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.baseInterestRate()",
+     "selector": "0xafd92762"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.expectedLiquidity()",
+     "selector": "0xfe14112d"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.quotaRevenue()",
+     "selector": "0x5a6952e4"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalAssets()",
+     "selector": "0x01e1d114"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "assets",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3._baseInterestRate",
+    "PoolV3._expectedLiquidityLU",
+    "PoolV3._quotaRevenue",
+    "PoolV3._totalDebt",
+    "PoolV3.lastBaseInterestUpdate",
+    "PoolV3.lastQuotaRevenueUpdate"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.totalBorrowed()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalBorrowed()",
+     "selector": "0x4c19386c"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3._totalDebt"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.totalDebtLimit()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3._convertToU256(uint128)",
+     "selector": "0xefb3a280"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.totalDebtLimit()",
+     "selector": "0x183ace90"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "uint256"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "PoolV3._totalDebt"
+   ],
+   "state_variables_written_keys": []
+  },
+  "PoolV3.underlyingToken()": {
+   "contract": "PoolV3",
+   "flow": [
+    {
+     "contract": "ERC4626",
+     "kind": "functioncontract",
+     "name": "ERC4626.asset()",
+     "selector": "0x38d52e0f"
+    },
+    {
+     "contract": "PoolV3",
+     "kind": "functioncontract",
+     "name": "PoolV3.underlyingToken()",
+     "selector": "0x2495a599"
+    }
+   ],
+   "inputs": [],
+   "msg_sender_constrained": false,
+   "outputs": [
+    [
+     "",
+     "address"
+    ]
+   ],
+   "reads_msg_sender": false,
+   "state_variables_read_keys": [
+    "ERC4626._asset"
+   ],
+   "state_variables_written_keys": []
+  }
+ }
+}
