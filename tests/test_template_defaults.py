@@ -38,3 +38,11 @@ def test_function_headers_prioritize_centered_contract_and_signature():
     assert 'class="node-header-title w-full min-w-0 px-24 font-mono text-base' in template
     assert "${node.contractName}.sol" in template
     assert "${node.signature.split('.', 2)[1] || node.signature}" in template
+
+
+def test_dashboard_omits_footer_tagline():
+    template = (
+        Path(__file__).resolve().parent.parent / "template.html"
+    ).read_text(encoding="utf-8")
+
+    assert "May the bugs be with you" not in template
