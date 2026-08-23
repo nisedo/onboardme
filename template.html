@@ -1048,8 +1048,7 @@
     cursor: default;
     }
 
-    .node-collapsed .node-header .node-header-icon,
-    .node-collapsed .node-header .node-header-title {
+    .node-collapsed .node-header .node-header-icon {
     display: none;
     }
 
@@ -4063,7 +4062,6 @@
       const arity = getDeclarationArityFromSource(node.code || '', baseFunctionName(node.functionName || node.name || node.signature || ''))
         ?? parseSignatureArity(node.signature || '');
       const functionKey = arity === null ? nameKey : `${nameKey}:${arity}`;
-      const safeName = node.name || node.functionName || node.signature || 'Unknown';
       const headerClickAttr = isEntryPointNode
         ? 'data-clickable="false"'
         : `data-clickable="true" onclick="toggleNodeCollapse('${collapseKey}', event)"`;
@@ -4071,26 +4069,19 @@
         ? `<div class="node-audit-flag"><span class="node-audit-dot"></span>Audited</div>`
         : '';
       const content = `
-                <div class="node-header bg-gradient-to-r from-slate-900/50 via-[#0b1221] to-transparent p-4 border-b border-cyan-900/30 flex items-start justify-between" ${headerClickAttr} aria-expanded="${collapsed ? 'false' : 'true'}">
-                    <div class="flex items-center gap-4 self-center">
-                        <div class="node-header-icon p-2 rounded border bg-opacity-10 ${node.type === 'entry-point' ? 'bg-cyan-500 border-cyan-500/50' : 'bg-[#081020] border-cyan-900/40'}">
-                            ${node.type === 'entry-point'
+                <div class="node-header relative min-h-[72px] bg-gradient-to-r from-slate-900/50 via-[#0b1221] to-transparent p-4 border-b border-cyan-900/30 flex items-center justify-center" ${headerClickAttr} aria-expanded="${collapsed ? 'false' : 'true'}">
+                    <div class="node-header-icon absolute left-4 p-2 rounded border bg-opacity-10 ${node.type === 'entry-point' ? 'bg-cyan-500 border-cyan-500/50' : 'bg-[#081020] border-cyan-900/40'}">
+                        ${node.type === 'entry-point'
           ? iconSvg('zap', 'w-5 h-5 text-cyan-400')
           : iconSvg('layers', 'w-5 h-5 text-cyan-900')}
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <h3 class="node-header-title font-display text-lg font-bold text-white tracking-wide typing-text" data-text="${safeName.length > 50 ? safeName.slice(0, 50) + '...' : safeName}"></h3>
-                            </div>
-                            <div class="font-mono text-[10px] text-slate-500 flex items-center gap-1">
-                                ${iconSvg('box', 'w-3 h-3 text-cyan-600 animate-pulse')}
-                                <span class="text-cyan-600 uppercase tracking-widest font-bold mt-[1px]">${node.contractName}.sol</span>
-                                ${iconSvg('code', 'w-3 h-3 text-green-600 animate-pulse')}
-                                <div class="text-green-600 font-mono flex items-center font-bold mt-[1px]"> ${node.signature.split('.', 2)[1] || node.signature} </div>
-                            </div>
-                        </div>
                     </div>
-                    ${auditFlagMarkup}
+                    <div class="node-header-title w-full min-w-0 px-24 font-mono text-base font-semibold flex items-center justify-center gap-2">
+                        ${iconSvg('box', 'w-4 h-4 shrink-0 text-cyan-600')}
+                        <span class="text-cyan-500 whitespace-nowrap">${node.contractName}.sol</span>
+                        ${iconSvg('code', 'w-4 h-4 shrink-0 text-green-600')}
+                        <span class="text-green-500 truncate">${node.signature.split('.', 2)[1] || node.signature}</span>
+                    </div>
+                    <div class="absolute right-4">${auditFlagMarkup}</div>
                 </div>
 		                <div class="node-body space-y-6">
 		                  <div class="node-body-inner space-y-6">
