@@ -49,6 +49,8 @@ def test_dashboard_omits_footer_tagline():
     ).read_text(encoding="utf-8")
 
     assert "May the bugs be with you" not in template
+    assert 'class="h-6 bg-[#040812] border-t border-cyan-900/30' not in template
+    assert 'class="flex space-x-1"' not in template
 
 
 def test_local_dashboards_link_back_to_project_index():
