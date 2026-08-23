@@ -37,7 +37,7 @@ def test_function_headers_vertically_center_contract_and_signature():
     assert "const safeName = node.name" not in template
     assert "flex items-center justify-between" in template
     assert 'class="flex items-center gap-4 min-w-0"' in template
-    assert 'class="node-header-title min-w-0 font-mono text-base' in template
+    assert 'class="node-header-title min-w-0 font-mono text-xl' in template
     assert "node-header-title w-full" not in template
     assert "${node.contractName}.sol" in template
     assert "${node.signature.split('.', 2)[1] || node.signature}" in template
