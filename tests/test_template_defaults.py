@@ -29,13 +29,16 @@ def test_cards_do_not_render_segmented_top_edge_ornament():
     assert 'class="absolute top-0 right-0 flex gap-1"' not in template
 
 
-def test_function_headers_prioritize_centered_contract_and_signature():
+def test_function_headers_vertically_center_contract_and_signature():
     template = (
         Path(__file__).resolve().parent.parent / "template.html"
     ).read_text(encoding="utf-8")
 
     assert "const safeName = node.name" not in template
-    assert 'class="node-header-title w-full min-w-0 px-24 font-mono text-base' in template
+    assert "flex items-center justify-between" in template
+    assert 'class="flex items-center gap-4 min-w-0"' in template
+    assert 'class="node-header-title min-w-0 font-mono text-base' in template
+    assert "node-header-title w-full" not in template
     assert "${node.contractName}.sol" in template
     assert "${node.signature.split('.', 2)[1] || node.signature}" in template
 

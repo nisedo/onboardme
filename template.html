@@ -4070,19 +4070,21 @@
         ? `<div class="node-audit-flag"><span class="node-audit-dot"></span>Audited</div>`
         : '';
       const content = `
-                <div class="node-header relative min-h-[72px] bg-gradient-to-r from-slate-900/50 via-[#0b1221] to-transparent p-4 border-b border-cyan-900/30 flex items-center justify-center" ${headerClickAttr} aria-expanded="${collapsed ? 'false' : 'true'}">
-                    <div class="node-header-icon absolute left-4 p-2 rounded border bg-opacity-10 ${node.type === 'entry-point' ? 'bg-cyan-500 border-cyan-500/50' : 'bg-[#081020] border-cyan-900/40'}">
-                        ${node.type === 'entry-point'
+                <div class="node-header relative min-h-[72px] bg-gradient-to-r from-slate-900/50 via-[#0b1221] to-transparent p-4 border-b border-cyan-900/30 flex items-center justify-between" ${headerClickAttr} aria-expanded="${collapsed ? 'false' : 'true'}">
+                    <div class="flex items-center gap-4 min-w-0">
+                        <div class="node-header-icon shrink-0 p-2 rounded border bg-opacity-10 ${node.type === 'entry-point' ? 'bg-cyan-500 border-cyan-500/50' : 'bg-[#081020] border-cyan-900/40'}">
+                            ${node.type === 'entry-point'
           ? iconSvg('zap', 'w-5 h-5 text-cyan-400')
           : iconSvg('layers', 'w-5 h-5 text-cyan-900')}
+                        </div>
+                        <div class="node-header-title min-w-0 font-mono text-base font-semibold flex items-center gap-2">
+                            ${iconSvg('box', 'w-4 h-4 shrink-0 text-cyan-600')}
+                            <span class="text-cyan-500 whitespace-nowrap">${node.contractName}.sol</span>
+                            ${iconSvg('code', 'w-4 h-4 shrink-0 text-green-600')}
+                            <span class="text-green-500 truncate">${node.signature.split('.', 2)[1] || node.signature}</span>
+                        </div>
                     </div>
-                    <div class="node-header-title w-full min-w-0 px-24 font-mono text-base font-semibold flex items-center justify-center gap-2">
-                        ${iconSvg('box', 'w-4 h-4 shrink-0 text-cyan-600')}
-                        <span class="text-cyan-500 whitespace-nowrap">${node.contractName}.sol</span>
-                        ${iconSvg('code', 'w-4 h-4 shrink-0 text-green-600')}
-                        <span class="text-green-500 truncate">${node.signature.split('.', 2)[1] || node.signature}</span>
-                    </div>
-                    <div class="absolute right-4">${auditFlagMarkup}</div>
+                    ${auditFlagMarkup}
                 </div>
 		                <div class="node-body space-y-6">
 		                  <div class="node-body-inner space-y-6">
