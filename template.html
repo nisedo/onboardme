@@ -18,8 +18,8 @@
     --color-cyan: #06b6d4;
     --color-cyan-glow: rgba(6, 182, 212, 0.6);
     --color-bg-dark: #040812;
-    --code-font-size: 18px;
-    --code-line-height: 25px;
+    --code-font-size: 16px;
+    --code-line-height: 22px;
     }
 
     body {
@@ -635,7 +635,7 @@
     outline: none;
     color: var(--comment-preview-color, #fbbf24);
     font-size: 11px;
-    line-height: var(--code-line-height, 25px);
+    line-height: var(--code-line-height, 22px);
     resize: vertical;
     }
 
@@ -1739,7 +1739,7 @@
 
     // --- STATE & UTILS ---
     const CODE_FONT_STORAGE_KEY = 'codeFontSizeV2';
-    const CODE_FONT_DEFAULT = 18;
+    const CODE_FONT_DEFAULT = 16;
     const CODE_FONT_MIN = 8;
     const CODE_FONT_MAX = 24;
     const AUDIT_STORAGE_KEY = 'auditedEntryPoints';
@@ -2299,8 +2299,8 @@
         commentLine.setAttribute('data-comment-for', lineKey);
         commentLine.style.setProperty('--comment-color', comment.color || DEFAULT_COMMENT_COLOR);
         commentLine.innerHTML = `
-          <span class="select-none w-5 text-right shrink-0 border-r border-cyan-900/30 pr-8 font-mono opacity-70" style="line-height:var(--code-line-height, 25px);height:var(--code-line-height, 25px);"></span>
-          <span class="comment-text whitespace-pre font-mono" style="line-height:var(--code-line-height, 25px);">${escapeHtmlGlobal(commentDisplay)}</span>
+          <span class="select-none w-5 text-right shrink-0 border-r border-cyan-900/30 pr-8 font-mono opacity-70" style="line-height:var(--code-line-height, 22px);height:var(--code-line-height, 22px);"></span>
+          <span class="comment-text whitespace-pre font-mono" style="line-height:var(--code-line-height, 22px);">${escapeHtmlGlobal(commentDisplay)}</span>
           <div class="absolute inset-0 ml-8 border-l-8 pointer-events-none" style="border-left-color: color-mix(in srgb, var(--comment-color) 45%, transparent);"></div>
         `;
         lineEl.parentElement?.insertBefore(commentLine, lineEl);
@@ -2806,7 +2806,7 @@
 
     const codeBlockCache = new Map();
     const renderCodeBlock = (code, functionInfo = null, variableScopeMap = null, variableRecords = [], originNodeId = '', opts = {}) => {
-      const lineHeight = 'var(--code-line-height, 25px)';
+      const lineHeight = 'var(--code-line-height, 22px)';
       const escapeHtml = (unsafe) => unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
       // Single rendering path for code widgets AND preview tooltips:
       //   mode:'highlight'      -> return { lines, highlightedLines } only

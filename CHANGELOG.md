@@ -28,6 +28,8 @@ recorded here.
 - Increase source-code text to an effective 18px with a 25px line height, and
   version the persisted font preference so the new default takes effect.
   ([b31d552](https://github.com/nisedo/onboardme/commit/b31d552))
+- Tune the source-code font down to 16px with a 22px line height after live UI
+  review showed that 18px was too large.
 
 ### Removed
 

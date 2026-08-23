@@ -17,7 +17,7 @@ def test_code_font_default_is_readable_and_consistent():
         re.search(r"const CODE_FONT_DEFAULT = (\d+);", template).group(1)
     )
 
-    assert css_size == js_default == 18
+    assert css_size == js_default == 16
     assert css_line_height == round(css_size * 1.4)
     assert "const CODE_FONT_STORAGE_KEY = 'codeFontSizeV2';" in template
     assert "stored = rawStored === null ? null : Number(rawStored);" in template
