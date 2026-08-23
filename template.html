@@ -2621,7 +2621,7 @@
       window.open(url, '_blank', 'noopener');
     };
 
-    const neonCardMarkup = (title, subtitle, content, className = '', noPadding = false) => `
+    const neonCardMarkup = (title, subtitle, content, className = '', noPadding = false, headerAction = '') => `
             <div class="relative flex flex-col group ${className}">
                 <div class="relative flex-1 bg-[#060b16]/90 backdrop-blur-xl flex flex-col overflow-hidden shadow-2xl rounded-sm">
                     <!-- BORDER SYSTEM -->
@@ -2640,6 +2640,7 @@
                                 ${title ? `<div class="relative z-10 flex items-center justify-between shrink-0"><div class="flex items-center gap-2"><div class="w-1 h-3 bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.8)]"></div><h3 class="text-cyan-400 font-display text-xs uppercase tracking-[0.2em] font-bold glitch-text cursor-default">${title}</h3></div></div>` : ''}
                                 ${subtitle ? `<div class="flex items-center gap-2"><span ${subtitle === CONTRACT_ADDRESS ? `id="contract-address-display" data-address="${subtitle}"` : ''} class="text-[9px] font-mono text-cyan-700 tracking-widest uppercase group-hover:text-cyan-500 transition-colors">// ${subtitle}</span></div>` : ''}
                             </div>
+                            ${headerAction ? `<div class="relative z-10 shrink-0">${headerAction}</div>` : ''}
                         </div>
                     ` : ''}
             
@@ -6324,6 +6325,12 @@
         : (appState.lastAction === 'toggle-left' ? 'animate-slideRight' : 'animate-slideRight');
       const chainLabel = (CONTRACT_CHAIN || 'mainnet').toUpperCase();
       const addressLabel = CONTRACT_ADDRESS || '0x0000000000000000000000000000000000000000';
+      const localProjectId = (CONTRACT_CHAIN || '').toLowerCase() === 'local'
+        ? (addressLabel.match(/^([a-f0-9]{12})_/i)?.[1] || '')
+        : '';
+      const projectHomeAction = localProjectId
+        ? `<a id="project-home" href="local_${localProjectId}_index.html" title="Back to project index" class="px-3 py-1.5 border border-cyan-900/50 rounded-sm text-[10px] font-mono font-semibold tracking-wider text-cyan-500 hover:text-cyan-200 hover:border-cyan-600 transition-colors">Home</a>`
+        : '';
       const isReadOnlyMode = appState.entryPointMode === 'read_only';
       const panelLabel = isReadOnlyMode ? 'READ-ONLY' : 'ENTRY POINTS';
       const contractSelector = (getSelectableContracts().length > 1)
@@ -6385,7 +6392,7 @@
                                   <div class="flex space-x-1"><div class="w-1.5 h-1.5 bg-cyan-400 rounded-sm animate-pulse shadow-[0_0_5px_rgba(34,211,238,0.8)]"></div><div class="w-1.5 h-1.5 bg-cyan-900/50 rounded-sm"></div><div class="w-1.5 h-1.5 bg-cyan-900/30 rounded-sm"></div></div>
                             </div>
                         </div>
-                    `, 'h-full', true)}
+                    `, 'h-full', true, projectHomeAction)}
                 </aside>
             `;
     };

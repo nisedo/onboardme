@@ -46,3 +46,13 @@ def test_dashboard_omits_footer_tagline():
     ).read_text(encoding="utf-8")
 
     assert "May the bugs be with you" not in template
+
+
+def test_local_dashboards_link_back_to_project_index():
+    template = (
+        Path(__file__).resolve().parent.parent / "template.html"
+    ).read_text(encoding="utf-8")
+
+    assert 'id="project-home"' in template
+    assert 'href="local_${localProjectId}_index.html"' in template
+    assert "(CONTRACT_CHAIN || '').toLowerCase() === 'local'" in template
