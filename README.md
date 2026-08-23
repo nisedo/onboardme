@@ -312,10 +312,16 @@ forge build
 
 Point OnboardMe to a folder, and it will detect all deployable "root" contracts (the ones intended to be deployed individually) and generate one HTML per root contract.
 
+OnboardMe also generates a project index by default. The index is named
+`local_<project-hash>_index.html` and links every root-contract dashboard, so
+you can bookmark one URL for the whole project.
+
 ```bash
 # Generate dashboards for a local Solidity project
 python main.py --local "/path/to/project"
 ```
+
+The command prints the project-index URL before the individual dashboard URLs.
 
 For example:
 

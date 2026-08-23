@@ -1,8 +1,9 @@
 """Generate a JSON file describing entry-point execution flows with state variable info."""
 
 import argparse
-import json
 import hashlib
+import html
+import json
 import logging
 import re
 import threading
@@ -402,6 +403,67 @@ def _local_project_hash(path: Path) -> str:
     return hashlib.md5(joined.encode("utf-8")).hexdigest()[:12]
 
 
+def _render_local_project_index(
+    project_path: Path,
+    project_hash: str,
+    results: Sequence[Dict[str, Any]],
+    output_dir: Path | None = None,
+) -> Path:
+    """Write a project landing page linking every generated root dashboard."""
+    output_dir = output_dir or Path("src")
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    project_name = project_path.name or str(project_path)
+    cards = []
+    for result in sorted(results, key=lambda item: str(item["contract"]).lower()):
+        contract_name = html.escape(str(result["contract"]))
+        filename = html.escape(Path(result["output_path"]).name, quote=True)
+        entry_count = int(result.get("entry_count", 0))
+        cards.append(
+            f'<li><a class="contract-card" href="{filename}">'
+            f'<strong>{contract_name}</strong>'
+            f'<span>{entry_count} entry point{"s" if entry_count != 1 else ""}</span>'
+            "</a></li>"
+        )
+
+    index_html = f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{html.escape(project_name)} · OnboardMe</title>
+  <style>
+    :root {{ color-scheme: dark; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }}
+    body {{ max-width: 72rem; margin: 0 auto; padding: 3rem 1.5rem; background: #040812; color: #e2e8f0; }}
+    header {{ margin-bottom: 2rem; }}
+    h1 {{ margin: 0 0 .5rem; color: #67e8f9; }}
+    p {{ color: #94a3b8; overflow-wrap: anywhere; }}
+    ul {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1rem; padding: 0; list-style: none; }}
+    .contract-card {{ display: flex; flex-direction: column; gap: .5rem; min-height: 4rem; padding: 1.25rem; border: 1px solid #164e63; border-radius: .75rem; background: #07111f; color: #e2e8f0; text-decoration: none; }}
+    .contract-card:hover, .contract-card:focus {{ border-color: #22d3ee; box-shadow: 0 0 1.25rem rgba(34, 211, 238, .2); }}
+    .contract-card strong {{ color: #67e8f9; font-size: 1.05rem; }}
+    .contract-card span {{ color: #94a3b8; }}
+    footer {{ margin-top: 2rem; }}
+    footer a {{ color: #67e8f9; }}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>{html.escape(project_name)}</h1>
+    <p>{len(results)} deployable root contract{"s" if len(results) != 1 else ""}</p>
+    <p>Generated from <code>{html.escape(str(project_path))}</code></p>
+  </header>
+  <main><ul>{''.join(cards)}</ul></main>
+  <footer><a href="./">OnboardMe home</a></footer>
+</body>
+</html>
+"""
+
+    index_path = output_dir / f"local_{project_hash}_index.html"
+    index_path.write_text(index_html, encoding="utf-8")
+    return index_path
+
+
 def _collect_render_metadata(
     slither: Slither,
     root_contracts: Sequence[Contract] | None = None,
@@ -674,6 +736,7 @@ def generate_html(
 def generate_from_local(
     source_path: str | Path,
     progress_cb: ProgressCallback | None = None,
+    output_dir: Path | None = None,
 ) -> List[Dict[str, Any]]:
     """Generate entry-point HTML for each deployable contract in a local project."""
     path = Path(source_path).resolve()
@@ -728,6 +791,7 @@ def generate_from_local(
             output_address,
             contract.name,
             solidity_label,
+            output_dir=output_dir,
             progress_cb=progress_cb,
         )
 
@@ -741,6 +805,16 @@ def generate_from_local(
                 "target": str(path),
             }
         )
+
+    _report_progress(progress_cb, "Writing project index")
+    index_path = _render_local_project_index(
+        path,
+        project_hash,
+        results,
+        output_dir=output_dir,
+    )
+    for result in results:
+        result["index_path"] = index_path
 
     return results
 
@@ -770,6 +844,9 @@ def main(argv: Sequence[str] | None = None) -> None:
 
     if args.local:
         results = generate_from_local(args.address_or_path)
+        index_path = results[0]["index_path"]
+        print(f"Project index: http://localhost:8000/{index_path.name}")
+        print()
         rows = []
         for result in results:
             output_path = result["output_path"]
