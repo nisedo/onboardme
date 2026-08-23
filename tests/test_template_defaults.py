@@ -19,3 +19,11 @@ def test_code_font_default_is_readable_and_consistent():
 
     assert css_size == js_default == 14
     assert css_line_height == round(css_size * 1.4)
+
+
+def test_cards_do_not_render_segmented_top_edge_ornament():
+    template = (
+        Path(__file__).resolve().parent.parent / "template.html"
+    ).read_text(encoding="utf-8")
+
+    assert 'class="absolute top-0 right-0 flex gap-1"' not in template
