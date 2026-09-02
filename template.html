@@ -1481,7 +1481,6 @@
     let hydratedWrite = null;
     let hydratedReadOnly = null;
 
-    let deviceGuardEl = null;
     let searchPaletteEl = null;
     let contractPaletteEl = null;
     let hotkeyHelpEl = null;
@@ -4760,40 +4759,6 @@
       highlightVariableUses(tokenEl, { lock: true });
     });
 
-    const ensureDeviceGuard = () => {
-      if (deviceGuardEl) return deviceGuardEl;
-      deviceGuardEl = document.createElement('div');
-      deviceGuardEl.id = 'device-guard';
-      deviceGuardEl.className = 'fixed inset-0 z-50 hidden lg:hidden bg-[#040812] flex items-center justify-center px-6';
-      deviceGuardEl.innerHTML = `
-        <div class="relative max-w-lg w-full">
-          <div class="absolute inset-0 blur-3xl bg-cyan-500/10"></div>
-          <div class="relative border border-cyan-900/40 bg-[#060b16]/90 backdrop-blur-xl rounded-sm shadow-2xl p-8 flex flex-col items-center text-center space-y-4">
-            <div class="flex items-center gap-2 text-cyan-400 font-display tracking-[0.2em] text-xs uppercase">
-              ${iconSvg('monitor-smartphone', 'w-4 h-4')}
-              <span>Desktop Required</span>
-            </div>
-            <p class="text-slate-200 font-display text-lg">This experience is crafted for widescreen desktops.</p>
-            <p class="text-slate-500 font-mono text-xs leading-relaxed">Please switch to a screen width of at least 1024px to explore the visualization. Resize your window or open on a desktop display.</p>
-            <div class="flex items-center gap-2 text-[10px] font-mono text-cyan-700 uppercase tracking-widest">
-              <div class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.7)] animate-pulse"></div>
-              awaiting widescreen signal...
-            </div>
-          </div>
-        </div>
-      `;
-      document.body.appendChild(deviceGuardEl);
-      return deviceGuardEl;
-    };
-
-    const applyResponsiveGuard = () => {
-      const guard = ensureDeviceGuard();
-      const root = document.getElementById('root');
-      const isDesktop = window.innerWidth >= 1024;
-      if (root) root.style.display = isDesktop ? 'flex' : 'none';
-      guard.style.display = isDesktop ? 'none' : 'flex';
-    };
-
     const applySidebarVisibility = () => {
       const leftEl = document.getElementById('sidebar-left');
       if (leftEl) {
@@ -7192,9 +7157,7 @@
 
       renderApp();
       appState.lastAction = 'idle';
-      applyResponsiveGuard();
       window.addEventListener('resize', () => {
-        applyResponsiveGuard();
         hideVarTooltip();
         hideFnTooltip();
         hideSenderTooltip();

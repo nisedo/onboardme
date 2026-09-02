@@ -36,6 +36,8 @@ recorded here.
 
 ### Removed
 
+- Remove the 1024px desktop-width gate so dashboards remain available on
+  smaller screens.
 - Remove the segmented cyan ornament from the top edge of dashboard cards.
   ([690723d](https://github.com/nisedo/onboardme/commit/690723d))
 - Remove the “May the bugs be with you <3” sidebar-footer tagline.

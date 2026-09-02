@@ -63,3 +63,14 @@ def test_local_dashboards_link_back_to_project_index():
     assert 'id="project-home"' in template
     assert 'href="local_${localProjectId}_index.html"' in template
     assert "(CONTRACT_CHAIN || '').toLowerCase() === 'local'" in template
+
+
+def test_dashboard_does_not_block_smaller_screens():
+    template = (
+        Path(__file__).resolve().parent.parent / "template.html"
+    ).read_text(encoding="utf-8")
+
+    assert 'id="device-guard"' not in template
+    assert "applyResponsiveGuard" not in template
+    assert "window.innerWidth >= 1024" not in template
+    assert "Desktop Required" not in template
