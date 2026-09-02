@@ -21,6 +21,7 @@ It doesn’t replace your IDE; it’s just the fastest way to understand all pos
 ## ✨ Features
 
 - 🧱 Supports local Solidity projects and deployed smart contracts
+- 🌓 Follows the operating-system light or dark appearance, including live changes
 - 🧵 Single scrollable execution flow per entry point, including internal calls
 - 🛡️ Summarize all checks on `msg.sender` to quickly detect access control issues or avoid wasting time in well-known and well-protected admin functions
 - 🔎 Storage dependency panel to trace writers for a selected storage variable

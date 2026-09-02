@@ -16,6 +16,9 @@ recorded here.
 
 ### Changed
 
+- Follow the operating-system appearance across the landing page, project
+  indexes, and generated dashboards, and switch live when the system theme
+  changes.
 - Raise the initial source-code font default from 10px to 14px, with a 20px
   line height. This was later superseded by the 18px default below.
   ([4061d99](https://github.com/nisedo/onboardme/commit/4061d99))

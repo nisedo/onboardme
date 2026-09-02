@@ -432,19 +432,55 @@ def _render_local_project_index(
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{html.escape(project_name)} · OnboardMe</title>
+  <script>
+    (() => {{
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+      const applySystemTheme = ({{matches}}) => {{
+        const theme = matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+      }};
+
+      applySystemTheme(systemTheme);
+      if (systemTheme.addEventListener) {{
+        systemTheme.addEventListener('change', applySystemTheme);
+      }} else {{
+        systemTheme.addListener(applySystemTheme);
+      }}
+    }})();
+  </script>
   <style>
-    :root {{ color-scheme: dark; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }}
-    body {{ max-width: 72rem; margin: 0 auto; padding: 3rem 1.5rem; background: #040812; color: #e2e8f0; }}
+    :root {{
+      color-scheme: dark;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      --theme-bg: #040812;
+      --theme-surface: #07111f;
+      --theme-text: #e2e8f0;
+      --theme-muted: #94a3b8;
+      --theme-accent: #67e8f9;
+      --theme-border: #164e63;
+      --theme-shadow: rgba(34, 211, 238, .2);
+    }}
+    html[data-theme="light"] {{
+      --theme-bg: #f8fafc;
+      --theme-surface: #ffffff;
+      --theme-text: #0f172a;
+      --theme-muted: #475569;
+      --theme-accent: #0e7490;
+      --theme-border: #a5f3fc;
+      --theme-shadow: rgba(8, 145, 178, .16);
+    }}
+    body {{ max-width: 72rem; margin: 0 auto; padding: 3rem 1.5rem; background: var(--theme-bg); color: var(--theme-text); transition: background-color .2s ease, color .2s ease; }}
     header {{ margin-bottom: 2rem; }}
-    h1 {{ margin: 0 0 .5rem; color: #67e8f9; }}
-    p {{ color: #94a3b8; overflow-wrap: anywhere; }}
+    h1 {{ margin: 0 0 .5rem; color: var(--theme-accent); }}
+    p {{ color: var(--theme-muted); overflow-wrap: anywhere; }}
     ul {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1rem; padding: 0; list-style: none; }}
-    .contract-card {{ display: flex; flex-direction: column; gap: .5rem; min-height: 4rem; padding: 1.25rem; border: 1px solid #164e63; border-radius: .75rem; background: #07111f; color: #e2e8f0; text-decoration: none; }}
-    .contract-card:hover, .contract-card:focus {{ border-color: #22d3ee; box-shadow: 0 0 1.25rem rgba(34, 211, 238, .2); }}
-    .contract-card strong {{ color: #67e8f9; font-size: 1.05rem; }}
-    .contract-card span {{ color: #94a3b8; }}
+    .contract-card {{ display: flex; flex-direction: column; gap: .5rem; min-height: 4rem; padding: 1.25rem; border: 1px solid var(--theme-border); border-radius: .75rem; background: var(--theme-surface); color: var(--theme-text); text-decoration: none; transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease; }}
+    .contract-card:hover, .contract-card:focus {{ border-color: var(--theme-accent); box-shadow: 0 0 1.25rem var(--theme-shadow); }}
+    .contract-card strong {{ color: var(--theme-accent); font-size: 1.05rem; }}
+    .contract-card span {{ color: var(--theme-muted); }}
     footer {{ margin-top: 2rem; }}
-    footer a {{ color: #67e8f9; }}
+    footer a {{ color: var(--theme-accent); }}
   </style>
 </head>
 <body>
